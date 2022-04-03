@@ -1,0 +1,13 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Forum\Topic\Controllers;
+
+final class ShowController extends \Phalcon\Mvc\Controller
+{
+    public function mainAction(): void
+    {
+
+    }
+}

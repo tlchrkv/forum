@@ -1,0 +1,50 @@
+version: '3.4'
+
+x-template: &php
+  build:
+    context: .
+    dockerfile: build/php/Dockerfile
+  networks:
+    - forum
+  depends_on:
+    - postgres
+  volumes:
+    - .:/opt/app:delegated
+  env_file:
+    - .env
+
+services:
+  nginx:
+    image: nginx:1.21-alpine
+    container_name: forum_nginx
+    restart: unless-stopped
+    networks:
+      - forum
+    depends_on:
+      - backend
+    volumes:
+      - ./:/opt/app
+      - ./build/nginx/config:/etc/nginx/conf.d
+    ports:
+      - "3134:80"
+
+  postgres:
+    image: postgres:12
+    container_name: forum_postgres
+    restart: unless-stopped
+    networks:
+      - forum
+    volumes:
+      - ./storage/postgres-data:/var/lib/postgresql/data
+    env_file:
+      - .env
+
+  backend:
+    <<: *php
+    container_name: forum_backend
+
+networks:
+  forum:
+    driver: "bridge"
+    driver_opts:
+      com.docker.network.driver.mtu: 1400

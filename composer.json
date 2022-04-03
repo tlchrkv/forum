@@ -1,0 +1,14 @@
+{
+  "name": "mailbot/forum",
+  "type": "project",
+  "description": "Forum",
+  "require": {
+    "php": "^7.2",
+    "ramsey/uuid": "^4.2"
+  },
+  "autoload": {
+    "psr-4": {
+      "App\\": "app"
+    }
+  }
+}

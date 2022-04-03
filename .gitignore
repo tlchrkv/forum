@@ -1,0 +1,4 @@
+vendor
+storage/postgres-data
+.env
+docker-compose.yml

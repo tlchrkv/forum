@@ -13,7 +13,7 @@ final class TopicRepository
     {
         $topic = Topic::findFirst("category_id = '$categoryId' and slug = '$slug'");
 
-        if ($topic === null) {
+        if ($topic === false) {
             throw new TopicNotFound();
         }
 

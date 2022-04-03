@@ -31,11 +31,11 @@ final class EditController extends \Phalcon\Mvc\Controller
 
     private function getAuth(): Auth
     {
-        return di(Auth::class);
+        return new Auth();
     }
 
     private function getCommentRepository(): CommentRepository
     {
-        return di(CommentRepository::class);
+        return new CommentRepository();
     }
 }

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Forum\Category\Controllers;
 
 use App\Forum\Category\Models\CategoryRepository;
-use App\Forum\Category\Models\TopicStorage;
+use App\Forum\Topic\Models\TopicRepository;
 use Ramsey\Uuid\Uuid;
 
 final class ShowController extends \Phalcon\Mvc\Controller
@@ -15,7 +15,7 @@ final class ShowController extends \Phalcon\Mvc\Controller
         $categoryId = Uuid::fromString($id);
 
         $category = $this->getCategoryRepository()->get($categoryId);
-        $topics = $this->getTopicStorage()->findAll();
+        $topics = $this->getTopicRepository()->findAll();
 
         echo $this->view->render(
             __DIR__ . '/../Views/show',
@@ -28,11 +28,11 @@ final class ShowController extends \Phalcon\Mvc\Controller
 
     private function getCategoryRepository(): CategoryRepository
     {
-        return di(CategoryRepository::class);
+        return new CategoryRepository();
     }
 
-    private function getTopicStorage(): TopicStorage
+    private function getTopicRepository(): TopicRepository
     {
-        return di(TopicStorage::class);
+        return new TopicRepository();
     }
 }

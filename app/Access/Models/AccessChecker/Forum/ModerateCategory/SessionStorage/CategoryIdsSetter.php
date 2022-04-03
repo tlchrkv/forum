@@ -11,9 +11,9 @@ final class CategoryIdsSetter
 {
     private $moderateCategoryRepository;
 
-    public function __construct(ModerateCategoryRepository $moderateCategoryRepository)
+    public function __construct()
     {
-        $this->moderateCategoryRepository = $moderateCategoryRepository;
+        $this->moderateCategoryRepository = new ModerateCategoryRepository();
     }
 
     public function exec(UuidInterface $userId): void
@@ -36,6 +36,6 @@ final class CategoryIdsSetter
 
     private function getSession()
     {
-        return di('session', true);
+        return diShared('session');
     }
 }

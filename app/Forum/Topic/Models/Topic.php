@@ -22,7 +22,7 @@ final class Topic extends \Phalcon\Mvc\Model
             'name' => $name,
             'slug' => StringConverter::readableToSlug($name),
             'content' => $content,
-            'created_at' => new \DateTime('now'),
+            'created_at' => (new \DateTime('now'))->format('Y-m-d H:i:s'),
             'created_by' => $userId,
         ]);
 
@@ -35,7 +35,7 @@ final class Topic extends \Phalcon\Mvc\Model
         $this->name = $name;
         $this->slug = StringConverter::readableToSlug($name);
         $this->content = $content;
-        $this->updated_at = new \DateTime('now');
+        $this->updated_at = (new \DateTime('now'))->format('Y-m-d H:i:s');
         $this->updated_by = $userId;
 
         $this->save();

@@ -14,7 +14,7 @@ final class CommentRepository
     {
         $comment = Comment::findFirst($id);
 
-        if ($comment === null) {
+        if ($comment === false) {
             throw new CommentNotFound();
         }
 

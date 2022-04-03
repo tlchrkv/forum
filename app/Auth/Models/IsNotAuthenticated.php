@@ -6,5 +6,8 @@ namespace App\Auth\Models;
 
 final class IsNotAuthenticated extends \Exception
 {
-
+    public function __construct()
+    {
+        parent::__construct('Authentication required');
+    }
 }

@@ -54,21 +54,21 @@ final class AddController extends \Phalcon\Mvc\Controller
 
     private function getCategoryRepository(): CategoryRepository
     {
-        return di(CategoryRepository::class);
+        return new CategoryRepository();
     }
 
     private function getTopicRepository(): TopicRepository
     {
-        return di(TopicRepository::class);
+        return new TopicRepository();
     }
 
     private function getCommentAccessChecker(): CommentAccessChecker
     {
-        return di(CommentAccessChecker::class);
+        return new CommentAccessChecker();
     }
 
     private function getAuth(): Auth
     {
-        return di(Auth::class);
+        return new Auth();
     }
 }

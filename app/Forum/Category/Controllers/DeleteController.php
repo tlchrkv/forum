@@ -17,6 +17,6 @@ final class DeleteController extends \Phalcon\Mvc\Controller
 
     private function getCategoryRepository(): CategoryRepository
     {
-        return di(CategoryRepository::class);
+        return new CategoryRepository();
     }
 }

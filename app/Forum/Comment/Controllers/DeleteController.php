@@ -16,6 +16,6 @@ final class DeleteController extends \Phalcon\Mvc\Controller
 
     private function getCommentRepository(): CommentRepository
     {
-        return di(CommentRepository::class);
+        return new CommentRepository();
     }
 }

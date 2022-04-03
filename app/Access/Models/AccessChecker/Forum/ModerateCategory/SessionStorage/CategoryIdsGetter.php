@@ -13,6 +13,6 @@ final class CategoryIdsGetter
 
     private function getSession()
     {
-        return di('session', true);
+        return diShared('session');
     }
 }

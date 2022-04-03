@@ -27,6 +27,10 @@ $diContainer->set('db', function () use ($databaseConfig) {
     ]);
 });
 
+$diContainer->setShared('config', function () {
+    return include __DIR__ . '/../config/config.php';
+});
+
 $arguments = [];
 
 foreach ($argv as $k => $arg) {

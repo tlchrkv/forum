@@ -13,7 +13,7 @@ final class CategoryRepository
     {
         $category = Category::findFirst($id);
 
-        if ($category === null) {
+        if ($category === false) {
             throw new CategoryNotFound();
         }
 
@@ -24,7 +24,7 @@ final class CategoryRepository
     {
         $category = Category::findFirst("slug = '$slug'");
 
-        if ($category === null) {
+        if ($category === false) {
             throw new CategoryNotFound();
         }
 

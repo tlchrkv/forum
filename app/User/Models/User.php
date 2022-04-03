@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\User\Models;
 
+use App\Access\Models\Role;
 use Ramsey\Uuid\UuidInterface;
 
 final class User extends \Phalcon\Mvc\Model
@@ -13,11 +14,11 @@ final class User extends \Phalcon\Mvc\Model
         $this->setSource('users');
     }
 
-    public static function create(
+    public static function add(
         UuidInterface $id,
         string $name,
         string $password,
-        string $role,
+        Role $role,
         UuidInterface $userId = null
     ): void {
         $user = new self([
@@ -25,7 +26,7 @@ final class User extends \Phalcon\Mvc\Model
             'name' => $name,
             'password_hash' => hash('sha256', $password),
             'role' => $role,
-            'created_at' => new \DateTime('now'),
+            'created_at' => (new \DateTime('now'))->format('Y-m-d H:i:s'),
             'created_by' => $userId,
         ]);
 

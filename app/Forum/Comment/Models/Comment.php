@@ -19,7 +19,7 @@ final class Comment extends \Phalcon\Mvc\Model
             'id' => $id,
             'topic_id' => $topicId,
             'content' => $content,
-            'created_at' => new \DateTime('now'),
+            'created_at' => (new \DateTime('now'))->format('Y-m-d H:i:s'),
             'created_by' => $userId,
         ]);
 
@@ -29,7 +29,7 @@ final class Comment extends \Phalcon\Mvc\Model
     public function edit(string $content, UuidInterface $userId): void
     {
         $this->content = $content;
-        $this->updated_at = new \DateTime('now');
+        $this->updated_at = (new \DateTime('now'))->format('Y-m-d H:i:s');
         $this->updated_by = $userId;
 
         $this->save();

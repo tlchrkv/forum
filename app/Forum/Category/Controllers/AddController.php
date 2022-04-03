@@ -13,7 +13,7 @@ use Ramsey\Uuid\Uuid;
 
 final class AddController extends \Phalcon\Mvc\Controller
 {
-    public function mainAction(): void
+    public function mainAction()
     {
         if (!$this->getCategoryAccessChecker()->canAdd()) {
             throw new Forbidden();
@@ -40,11 +40,11 @@ final class AddController extends \Phalcon\Mvc\Controller
 
     private function getCategoryAccessChecker(): CategoryAccessChecker
     {
-        return di(CategoryAccessChecker::class);
+        return new CategoryAccessChecker();
     }
 
     private function getAuth(): Auth
     {
-        return di(Auth::class);
+        return new Auth();
     }
 }

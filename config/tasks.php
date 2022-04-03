@@ -9,4 +9,10 @@ return [
         'slug' => 'run-migration',
         'action' => 'main',
     ],
+    'admin:create' => [
+        'desc' => 'Create new user',
+        'namespace' => 'App\User\Console',
+        'slug' => 'create-first-admin',
+        'action' => 'main',
+    ],
 ];

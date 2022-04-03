@@ -4,27 +4,24 @@ declare(strict_types=1);
 
 namespace App\Auth\Models;
 
-use App\Auth\Models\AccessLoader\AccessSessionDestroyer;
-use App\Auth\Models\AccessLoader\AccessSessionSetter;
-use App\Auth\Models\User\User;
-use App\Auth\Models\User\UserNotFound;
-use App\Auth\Models\User\UserStorage;
+use App\Access\Models\AccessChecker\Forum\ModerateCategory\SessionStorage\CategoryIdsDestroyer;
+use App\Access\Models\AccessChecker\Forum\ModerateCategory\SessionStorage\CategoryIdsSetter;
+use App\User\Models\User;
+use App\User\Models\UserNotFound;
+use App\User\Models\UserRepository;
 use Ramsey\Uuid\Uuid;
 
 final class Auth
 {
-    private $userStorage;
+    private $userRepository;
     private $accessSessionSetter;
     private $accessSessionDestroyer;
 
-    public function __construct(
-        UserStorage $userStorage,
-        AccessSessionSetter $accessSessionSetter,
-        AccessSessionDestroyer $accessSessionDestroyer
-    ) {
-        $this->userStorage = $userStorage;
-        $this->accessSessionSetter = $accessSessionSetter;
-        $this->accessSessionDestroyer = $accessSessionDestroyer;
+    public function __construct()
+    {
+        $this->userRepository = new UserRepository();
+        $this->accessSessionSetter = new CategoryIdsSetter();
+        $this->accessSessionDestroyer = new CategoryIdsDestroyer();
     }
 
     /**
@@ -33,7 +30,7 @@ final class Auth
     public function login(string $name, string $password): void
     {
         try {
-            $user = $this->userStorage->getByName($name);
+            $user = $this->userRepository->getByName($name);
         } catch (UserNotFound $exception) {
             throw new LoginFailed();
         }
@@ -58,7 +55,7 @@ final class Auth
         try {
             $userId = Uuid::fromString($this->getSession()->has('user_id'));
 
-            return $this->userStorage->get($userId);
+            return $this->userRepository->get($userId);
         } catch (UserNotFound $exception) {
             throw new IsNotAuthenticated();
         }
@@ -72,6 +69,6 @@ final class Auth
 
     private function getSession()
     {
-        return di('session', true);
+        return \Phalcon\DI::getDefault()->getShared('session');
     }
 }

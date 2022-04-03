@@ -27,6 +27,6 @@ final class LoginController extends \Phalcon\Mvc\Controller
 
     private function getAuth(): Auth
     {
-        return di(Auth::class);
+        return new Auth();
     }
 }

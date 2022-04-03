@@ -4,20 +4,20 @@ declare(strict_types=1);
 
 namespace App\Access\Models\AccessChecker\Forum;
 
-use App\Access\Models\AuthenticatedUserResolver\UserResolver;
 use App\Access\Models\Role;
 use App\Access\Models\AccessChecker\Forum\ModerateCategory\SessionStorage\CategoryIdsGetter;
+use App\Auth\Models\Auth;
 use Ramsey\Uuid\UuidInterface;
 
 final class CommentAccessChecker
 {
-    private $userResolver;
+    private $auth;
     private $categoryIdsGetter;
 
-    public function __construct(UserResolver $userResolver, CategoryIdsGetter $categoryIdsGetter)
+    public function __construct()
     {
-        $this->userResolver = $userResolver;
-        $this->categoryIdsGetter = $categoryIdsGetter;
+        $this->auth = new Auth();
+        $this->categoryIdsGetter = new CategoryIdsGetter();
     }
 
     public function canAdd(): bool
@@ -27,21 +27,21 @@ final class CommentAccessChecker
 
     public function canChange(UuidInterface $categoryId, UuidInterface $authorId): bool
     {
-        $user = $this->userResolver->getUser();
+        $user = $this->auth->getUserFromSession();
 
         if ($user === null) {
             return false;
         }
 
-        if ($authorId === $user->id) {
+        if ($authorId->toString() === $user->id) {
             return true;
         }
 
-        if ($user->role == Role::admin()) {
+        if ($user->role === Role::admin()->value) {
             return true;
         }
 
-        if ($user->role == Role::moderator()) {
+        if ($user->role === Role::moderator()->value) {
             return in_array($categoryId->toString(), $this->categoryIdsGetter->exec());
         }
 

@@ -15,7 +15,7 @@ final class UserRepository
     {
         $user = User::findFirst($id);
 
-        if ($user === null) {
+        if ($user === false) {
             throw new UserNotFound();
         }
 
@@ -27,14 +27,9 @@ final class UserRepository
      */
     public function getByName(string $name): User
     {
-        $user =  User::findFirst([
-            'conditions' => 'name = :name:',
-            'bind' => [
-                'name' => $name,
-            ],
-        ]);
+        $user = User::findFirst(['conditions' => 'name = ?0', 'bind' => [$name]]);
 
-        if ($user === null) {
+        if ($user === false) {
             throw new UserNotFound();
         }
 

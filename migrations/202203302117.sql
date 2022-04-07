@@ -1,14 +1,3 @@
-CREATE TABLE files (
-    id UUID NOT NULL,
-    name VARCHAR(63) NOT NULL,
-    mime_type VARCHAR(255) NOT NULL,
-    placement VARCHAR(255) NOT NULL,
-    created_at TIMESTAMP(0) WITH TIME ZONE NOT NULL,
-    relation_table VARCHAR(255) NOT NULL,
-    relation_id UUID NOT NULL,
-    PRIMARY KEY(id)
-);
-
 CREATE TABLE users (
     id UUID NOT NULL,
     name VARCHAR(63) NOT NULL,

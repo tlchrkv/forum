@@ -6,22 +6,24 @@ namespace App\Forum\Category\Controllers;
 
 use App\Forum\Category\Models\CategoryRepository;
 use App\Forum\Topic\Models\TopicRepository;
-use Ramsey\Uuid\Uuid;
 
 final class ShowController extends \Phalcon\Mvc\Controller
 {
-    public function mainAction(string $id): void
+    public function mainAction(string $slug): void
     {
-        $categoryId = Uuid::fromString($id);
+        $category = $this->getCategoryRepository()->getBySlug($slug);
 
-        $category = $this->getCategoryRepository()->get($categoryId);
-        $topics = $this->getTopicRepository()->findAll();
+        $page = (int) $this->request->getQuery('page', 'int', 1);
+
+        $topics = $this->getTopicRepository()->findByCategoryId($category->id, $page, 10);
 
         echo $this->view->render(
             __DIR__ . '/../Views/show',
             [
                 'category' => $category,
                 'topics' => $topics,
+                'page' => $page,
+                'pages' => ceil($this->getTopicRepository()->countByCategoryId($category->id) / 10),
             ]
         );
     }

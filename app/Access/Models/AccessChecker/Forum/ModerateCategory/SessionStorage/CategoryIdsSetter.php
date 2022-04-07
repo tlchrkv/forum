@@ -36,6 +36,6 @@ final class CategoryIdsSetter
 
     private function getSession()
     {
-        return diShared('session');
+        return \Phalcon\DI::getDefault()->getShared('session');
     }
 }

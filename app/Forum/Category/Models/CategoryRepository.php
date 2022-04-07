@@ -9,9 +9,9 @@ use Ramsey\Uuid\UuidInterface;
 
 final class CategoryRepository
 {
-    public function get(UuidInterface $id): Category
+    public function get($id): Category
     {
-        $category = Category::findFirst($id);
+        $category = Category::findFirst("id = '$id'");
 
         if ($category === false) {
             throw new CategoryNotFound();

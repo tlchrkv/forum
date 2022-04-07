@@ -32,17 +32,17 @@
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
       <li class="breadcrumb-item"><a href="/">All categories</a></li>
-      <li class="breadcrumb-item active" aria-current="page">Add category</li>
+      <li class="breadcrumb-item active" aria-current="page">Edit {{ category.name }}</li>
     </ol>
   </nav>
 
-  <h1 class="card-title" style="margin-bottom: 2rem">Add category</h1>
+  <h1 class="card-title" style="margin-bottom: 2rem">Edit {{ category.name }}</h1>
 
-  <form action="/add-category" method="post" style="margin-bottom: 2rem">
+  <form action="/categories/{{ category.id }}" method="post" style="margin-bottom: 2rem">
     <div class="mb-3">
-      <input class="form-control" name="name" placeholder="Category name" />
+      <input class="form-control" name="name" placeholder="Category name" value="{{ category.name }}" />
     </div>
-    <button type="submit" class="btn btn-primary">Add category</button>
+    <button type="submit" class="btn btn-primary">Save changes</button>
   </form>
 
 </div>

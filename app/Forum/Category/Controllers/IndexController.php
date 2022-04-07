@@ -12,7 +12,7 @@ final class IndexController extends \Phalcon\Mvc\Controller
     {
         $categories = $this->getCategoryRepository()->findAll();
 
-        echo $this->view->render(__DIR__ . '/../Views/index');
+        echo $this->view->render(__DIR__ . '/../Views/index', ['categories' => $categories]);
     }
 
     private function getCategoryRepository(): CategoryRepository

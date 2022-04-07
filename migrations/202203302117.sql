@@ -21,10 +21,10 @@ CREATE TABLE users (
     PRIMARY KEY(id)
 );
 
-CREATE TABLE user_forum_categories (
-    id UUID NOT NULL,
-    forum_category_id UUID NOT NULL,
-    PRIMARY KEY(id, forum_category_id)
+CREATE TABLE access_forum_moderate_categories (
+    user_id UUID NOT NULL,
+    category_id UUID NOT NULL,
+    PRIMARY KEY(user_id, category_id)
 );
 
 CREATE TABLE forum_categories (
@@ -54,11 +54,11 @@ CREATE TABLE forum_topics (
 CREATE TABLE forum_comments (
     id UUID NOT NULL,
     topic_id UUID NOT NULL,
-    reply_to UUID NOT NULL,
+    reply_to UUID NULL,
     content TEXT NOT NULL,
     created_at TIMESTAMP(0) WITH TIME ZONE NOT NULL,
     updated_at TIMESTAMP(0) WITH TIME ZONE NULL,
-    created_by UUID NOT NULL,
+    created_by UUID NULL,
     updated_by UUID NULL,
     PRIMARY KEY(id)
 );

@@ -33,8 +33,11 @@ final class User extends \Phalcon\Mvc\Model
         $user->save();
     }
 
-    public function assignRole(string $role, $userId): void
+    public function assignRole(Role $role, $userId): void
     {
-
+        $this->role = $role;
+        $this->updated_at = (new \DateTime('now'))->format('Y-m-d H:i:s');
+        $this->updated_by = $userId;
+        $this->save();
     }
 }

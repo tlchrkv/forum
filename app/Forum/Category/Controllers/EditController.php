@@ -7,15 +7,15 @@ namespace App\Forum\Category\Controllers;
 use App\Access\Models\AccessChecker\Forum\CategoryAccessChecker;
 use App\Access\Models\Forbidden;
 use App\Auth\Models\Auth;
-use App\Forum\Category\Models\Category;
+use App\Forum\Category\Models\CategoryRepository;
 use App\SharedKernel\Http\Validation;
 use Ramsey\Uuid\Uuid;
 
-final class AddController extends \Phalcon\Mvc\Controller
+final class EditController extends \Phalcon\Mvc\Controller
 {
-    public function mainAction()
+    public function mainAction(string $id)
     {
-        if (!$this->getCategoryAccessChecker()->canAdd()) {
+        if (!$this->getCategoryAccessChecker()->canChange($id)) {
             throw new Forbidden();
         }
 
@@ -28,18 +28,20 @@ final class AddController extends \Phalcon\Mvc\Controller
 
             $user = $this->getAuth()->getUserFromSession();
 
-            Category::add(
-                Uuid::uuid4(),
-                $_POST['name'],
-                Uuid::fromString($user->id)
-            );
+            $category = $this->getCategoryRepository()->get(Uuid::fromString($id));
+            $category->edit($_POST['name'], Uuid::fromString($user->id));
 
-            $this->response->redirect('/');
+            $this->response->redirect('/' . $category->slug);
 
             return;
         }
 
-        echo $this->view->render(__DIR__ . '/../Views/add');
+        echo $this->view->render(
+            __DIR__ . '/../Views/edit',
+            [
+                'category' => $this->getCategoryRepository()->get(Uuid::fromString($id)),
+            ]
+        );
     }
 
     private function getCategoryAccessChecker(): CategoryAccessChecker
@@ -50,5 +52,10 @@ final class AddController extends \Phalcon\Mvc\Controller
     private function getAuth(): Auth
     {
         return new Auth();
+    }
+
+    private function getCategoryRepository(): CategoryRepository
+    {
+        return new CategoryRepository();
     }
 }

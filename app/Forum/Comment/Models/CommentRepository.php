@@ -10,9 +10,9 @@ use Ramsey\Uuid\UuidInterface;
 
 final class CommentRepository
 {
-    public function get(UuidInterface $id): Comment
+    public function get($id): Comment
     {
-        $comment = Comment::findFirst($id);
+        $comment = Comment::findFirst("id = '$id'");
 
         if ($comment === false) {
             throw new CommentNotFound();
@@ -21,14 +21,20 @@ final class CommentRepository
         return $comment;
     }
 
-    public function findByTopicId(UuidInterface $topicId, TimeSorting $timeSorting): Resultset
+    public function countByTopicId(UuidInterface $topicId): int
     {
+        return Comment::count("topic_id = '$topicId'");
+    }
+
+    public function findByTopicId(UuidInterface $topicId, TimeSorting $timeSorting, int $page, int $limit): Resultset
+    {
+        $sortingDirection = $timeSorting == TimeSorting::newest() ? 'desc' : 'asc';
+
         return Comment::find([
-            'conditions' => 'topic_id = :topic_id:',
-            'bind' => [
-                'topic_id' => $topicId,
-            ],
-            'order' => 'created_at ' . $timeSorting == TimeSorting::newest() ? 'desc' : 'asc',
+            "topic_id = '$topicId'",
+            'order' => 'created_at ' . $sortingDirection,
+            'limit' => $limit,
+            'offset' => ($page - 1) * $limit,
         ]);
     }
 }

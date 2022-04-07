@@ -1,25 +1,31 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\User\Controllers;
 
 use App\Access\Models\AccessChecker\User\AccessChecker;
 use App\Access\Models\Forbidden;
 use App\User\Models\UserRepository;
 
-final class DeleteController extends \Phalcon\Mvc\Controller
+final class IndexController extends \Phalcon\Mvc\Controller
 {
-    public function mainAction(string $id): void
+    public function mainAction(): void
     {
         if (!$this->getAccessChecker()->canManageUsers()) {
             throw new Forbidden();
         }
 
-        $user = $this->getUserRepository()->get($id);
-        $user->delete();
+        $page = (int) $this->request->getQuery('page', 'int', 1);
 
-        $this->response->redirect('/users');
+        $users = $this->getUserRepository()->find($page, 10);
+
+        echo $this->view->render(
+            __DIR__ . '/../Views/index',
+            [
+                'users' => $users,
+                'page' => $page,
+                'pages' => ceil($this->getUserRepository()->count() / 10),
+            ]
+        );
     }
 
     private function getUserRepository(): UserRepository

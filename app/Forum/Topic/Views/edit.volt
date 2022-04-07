@@ -3,6 +3,7 @@
 <head>
   <title>{{ appName }}</title>
   <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/assets/quill/quill.snow.css">
   <style>
       a {
           color: #135083;
@@ -32,19 +33,44 @@
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
       <li class="breadcrumb-item"><a href="/">All categories</a></li>
-      <li class="breadcrumb-item active" aria-current="page">Add category</li>
+      <li class="breadcrumb-item"><a href="/{{ category.slug }}">{{ category.name }}</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Edit {{ topic.name }}</li>
     </ol>
   </nav>
 
-  <h1 class="card-title" style="margin-bottom: 2rem">Add category</h1>
+  <h1 class="card-title" style="margin-bottom: 2rem">Edit {{ topic.name }}</h1>
 
-  <form action="/add-category" method="post" style="margin-bottom: 2rem">
+  <form action="/topics/{{ topic.id }}" method="post" style="margin-bottom: 2rem">
     <div class="mb-3">
-      <input class="form-control" name="name" placeholder="Category name" />
+      <input class="form-control" name="name" placeholder="Topic name" value="{{ topic.name }}" />
     </div>
-    <button type="submit" class="btn btn-primary">Add category</button>
+    <input name="content" type="hidden" />
+    <div id="editor" style="margin-bottom: 2rem;height: 375px;">
+      {{ topic.content }}
+    </div>
+    <button type="submit" class="btn btn-primary">Save changes</button>
   </form>
 
 </div>
+<script src="/assets/quill/quill.js"></script>
+<script>
+  var quill = new Quill('#editor', {
+    modules: {
+      toolbar: [
+        [{ header: [1, 2, false] }],
+        ['bold', 'italic', 'underline'],
+        ['image', 'code-block']
+      ]
+    },
+    placeholder: 'Write content here...',
+    theme: 'snow'
+  });
+
+  var form = document.querySelector('form');
+  form.onsubmit = function() {
+    var content = document.querySelector('input[name=content]');
+    content.value = document.querySelector('.ql-editor').innerHTML;
+  }
+</script>
 </body>
 </html>

@@ -13,6 +13,6 @@ final class CategoryIdsGetter
 
     private function getSession()
     {
-        return diShared('session');
+        return \Phalcon\DI::getDefault()->getShared('session');
     }
 }

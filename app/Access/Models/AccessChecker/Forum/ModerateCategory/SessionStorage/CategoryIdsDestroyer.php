@@ -6,13 +6,13 @@ namespace App\Access\Models\AccessChecker\Forum\ModerateCategory\SessionStorage;
 
 final class CategoryIdsDestroyer
 {
-    public function exec(): array
+    public function exec(): void
     {
-        return $this->getSession()->destroy('moderate_categories');
+        $this->getSession()->destroy('moderate_categories');
     }
 
     private function getSession()
     {
-        return diShared('session');
+        return \Phalcon\DI::getDefault()->getShared('session');
     }
 }

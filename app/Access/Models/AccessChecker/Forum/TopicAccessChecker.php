@@ -22,10 +22,16 @@ final class TopicAccessChecker
 
     public function canAdd(): bool
     {
+        $user = $this->auth->getUserFromSession();
+
+        if ($user === null) {
+            return false;
+        }
+
         return true;
     }
 
-    public function canChange(UuidInterface $categoryId, UuidInterface $authorId): bool
+    public function canDelete($categoryId, $authorId): bool
     {
         $user = $this->auth->getUserFromSession();
 
@@ -33,7 +39,7 @@ final class TopicAccessChecker
             return false;
         }
 
-        if ($authorId->toString() === $user->id) {
+        if ($authorId === $user->id) {
             return true;
         }
 
@@ -42,7 +48,30 @@ final class TopicAccessChecker
         }
 
         if ($user->role === Role::moderator()->value) {
-            return in_array($categoryId->toString(), $this->categoryIdsGetter->exec());
+            return in_array($categoryId, $this->categoryIdsGetter->exec());
+        }
+
+        return false;
+    }
+
+    public function canChange($categoryId, $authorId): bool
+    {
+        $user = $this->auth->getUserFromSession();
+
+        if ($user === null) {
+            return false;
+        }
+
+        if ($authorId === $user->id) {
+            return true;
+        }
+
+        if ($user->role === Role::admin()->value) {
+            return true;
+        }
+
+        if ($user->role === Role::moderator()->value) {
+            return in_array($categoryId, $this->categoryIdsGetter->exec());
         }
 
         return false;

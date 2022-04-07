@@ -8,19 +8,19 @@ use App\Access\Models\AccessChecker\Forum\TopicAccessChecker;
 use App\Access\Models\Forbidden;
 use App\Auth\Models\Auth;
 use App\Forum\Category\Models\CategoryRepository;
-use App\Forum\Topic\Models\Topic;
+use App\Forum\Topic\Models\TopicRepository;
 use App\SharedKernel\Http\Validation;
-use Ramsey\Uuid\Uuid;
 
-final class AddController extends \Phalcon\Mvc\Controller
+final class EditController extends \Phalcon\Mvc\Controller
 {
-    public function mainAction(string $categorySlug): void
+    public function mainAction(string $id): void
     {
-        if (!$this->getTopicAccessChecker()->canAdd()) {
+        $topic = $this->getTopicRepository()->get($id);
+        $category = $this->getCategoryRepository()->get($topic->category_id);
+
+        if (!$this->getTopicAccessChecker()->canChange($topic->category_id, $topic->created_by)) {
             throw new Forbidden();
         }
-
-        $category = $this->getCategoryRepository()->getBySlug($categorySlug);
 
         if ($this->request->isPost()) {
             $validation = new Validation([
@@ -32,20 +32,18 @@ final class AddController extends \Phalcon\Mvc\Controller
 
             $user = $this->getAuth()->getUserFromSession();
 
-            $topic = Topic::add(
-                Uuid::uuid4(),
-                Uuid::fromString($category->id),
+            $topic->edit(
                 $_POST['name'],
                 $_POST['content'],
-                Uuid::fromString($user->id)
+                $user->id
             );
 
-            $this->response->redirect('/' . $categorySlug . '/' . $topic->slug);
+            $this->response->redirect('/' . $category->slug . '/' . $topic->slug);
 
             return;
         }
 
-        echo $this->view->render(__DIR__ . '/../Views/add', ['category' => $category]);
+        echo $this->view->render(__DIR__ . '/../Views/edit', ['category' => $category, 'topic' => $topic]);
     }
 
     private function getTopicAccessChecker(): TopicAccessChecker
@@ -61,5 +59,10 @@ final class AddController extends \Phalcon\Mvc\Controller
     private function getCategoryRepository(): CategoryRepository
     {
         return new CategoryRepository();
+    }
+
+    private function getTopicRepository(): TopicRepository
+    {
+        return new TopicRepository();
     }
 }

@@ -14,7 +14,7 @@ final class Topic extends \Phalcon\Mvc\Model
         $this->setSource('forum_topics');
     }
 
-    public static function add(UuidInterface $id, UuidInterface $categoryId, string $name, string $content, UuidInterface $userId): void
+    public static function add(UuidInterface $id, UuidInterface $categoryId, string $name, string $content, UuidInterface $userId): self
     {
         $topic = new Topic([
             'id' => $id,
@@ -27,11 +27,12 @@ final class Topic extends \Phalcon\Mvc\Model
         ]);
 
         $topic->save();
+
+        return $topic;
     }
 
-    public function edit(UuidInterface $categoryId, string $name, string $content, UuidInterface $userId): void
+    public function edit(string $name, string $content, $userId): void
     {
-        $this->category_id = $categoryId;
         $this->name = $name;
         $this->slug = StringConverter::readableToSlug($name);
         $this->content = $content;

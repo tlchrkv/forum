@@ -35,35 +35,34 @@ final class Auth
             throw new LoginFailed();
         }
 
-        if ($user->passwordHash === hash('sha256', $password)) {
+        if ($user->password_hash === hash('sha256', $password)) {
             $this->getSession()->set('user_id', $user->id);
-            $this->accessSessionSetter->exec($user->id);
+            $this->accessSessionSetter->exec(Uuid::fromString($user->id));
+
+            return;
         }
 
         throw new LoginFailed();
     }
 
-    /**
-     * @return IsNotAuthenticated
-     */
-    public function getUserFromSession(): User
+    public function getUserFromSession(): ?User
     {
         if (!$this->getSession()->has('user_id')) {
-            throw new IsNotAuthenticated();
+            return null;
         }
 
         try {
-            $userId = Uuid::fromString($this->getSession()->has('user_id'));
+            $userId = Uuid::fromString($this->getSession()->get('user_id'));
 
             return $this->userRepository->get($userId);
         } catch (UserNotFound $exception) {
-            throw new IsNotAuthenticated();
+            return null;
         }
     }
 
     public function logout(): void
     {
-        $this->accessSessionDestroyer->exec();
+        // $this->accessSessionDestroyer->exec();
         $this->getSession()->destroy();
     }
 

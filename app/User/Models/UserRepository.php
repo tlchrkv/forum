@@ -4,16 +4,16 @@ declare(strict_types=1);
 
 namespace App\User\Models;
 
-use Ramsey\Uuid\UuidInterface;
+use Phalcon\Mvc\Model\Resultset;
 
 final class UserRepository
 {
     /**
      * @throws UserNotFound
      */
-    public function get(UuidInterface $id)
+    public function get($id): User
     {
-        $user = User::findFirst($id);
+        $user = User::findFirst("id = '$id'");
 
         if ($user === false) {
             throw new UserNotFound();
@@ -34,5 +34,19 @@ final class UserRepository
         }
 
         return $user;
+    }
+
+    public function find(int $page, int $limit): Resultset
+    {
+        return User::find([
+            'order' => 'created_at desc',
+            'limit' => $limit,
+            'offset' => ($page - 1) * $limit,
+        ]);
+    }
+
+    public function count(): int
+    {
+        return User::count();
     }
 }

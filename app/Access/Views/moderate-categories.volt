@@ -6,6 +6,7 @@
   <style>
       a {
           color: #135083;
+          /*text-decoration: none;*/
       }
   </style>
 </head>
@@ -31,19 +32,28 @@
 
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="/">All categories</a></li>
-      <li class="breadcrumb-item active" aria-current="page">Add category</li>
+      <li class="breadcrumb-item"><a href="/">Home</a></li>
+      <li class="breadcrumb-item"><a href="/users">Users</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Moderate categories for {{ user1.name }}</li>
     </ol>
   </nav>
 
-  <h1 class="card-title" style="margin-bottom: 2rem">Add category</h1>
+  <h1 class="card-title" style="margin-bottom: 2rem">Moderate categories for {{ user1.name }}</h1>
 
-  <form action="/add-category" method="post" style="margin-bottom: 2rem">
-    <div class="mb-3">
-      <input class="form-control" name="name" placeholder="Category name" />
+  <a href="/access/users/{{ user1.id }}/assign-category" class="btn btn-primary" style="margin-bottom: 2rem">Assign new category</a>
+
+  {% for category in categories %}
+    <div class="" style="margin-bottom: 1rem;">
+      <div class="">
+        <div class="d-flex justify-content-between">
+          <div class="fw-bold">{{ category.getCategory().name }}</div>
+          <div>
+            <a href="/access/users/{{ user1.id }}/moderate-categories/{{ category.category_id }}/delete" style="margin-right: 5px">Delete</a>
+          </div>
+        </div>
+      </div>
     </div>
-    <button type="submit" class="btn btn-primary">Add category</button>
-  </form>
+  {% endfor %}
 
 </div>
 </body>

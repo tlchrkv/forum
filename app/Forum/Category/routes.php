@@ -3,20 +3,29 @@
 declare(strict_types=1);
 
 return [
-    'category:add' => [
-        'pattern' => '/add-category',
+    'category:delete' => [
+        'pattern' => '/categories/{id}/delete',
         'paths' => [
             'namespace' => 'App\Forum\Category\Controllers',
-            'controller' => 'add',
+            'controller' => 'delete',
+            'action' => 'main',
+        ],
+        'httpMethods' => ['GET'],
+    ],
+    'category:edit' => [
+        'pattern' => '/categories/{id}',
+        'paths' => [
+            'namespace' => 'App\Forum\Category\Controllers',
+            'controller' => 'edit',
             'action' => 'main',
         ],
         'httpMethods' => ['GET', 'POST'],
     ],
-    'category:delete' => [
-        'pattern' => '/categories/:id/delete',
+    'category:show' => [
+        'pattern' => '/{slug}',
         'paths' => [
             'namespace' => 'App\Forum\Category\Controllers',
-            'controller' => 'delete',
+            'controller' => 'show',
             'action' => 'main',
         ],
         'httpMethods' => ['GET'],
@@ -30,13 +39,13 @@ return [
         ],
         'httpMethods' => ['GET'],
     ],
-    'category:show' => [
-        'pattern' => '/:name',
+    'category:add' => [
+        'pattern' => '/add-category',
         'paths' => [
             'namespace' => 'App\Forum\Category\Controllers',
-            'controller' => 'show',
+            'controller' => 'add',
             'action' => 'main',
         ],
-        'httpMethods' => ['GET'],
+        'httpMethods' => ['GET', 'POST'],
     ],
 ];

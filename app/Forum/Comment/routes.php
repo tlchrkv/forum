@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 return [
     'comment:add' => [
-        'pattern' => '/:category/:topic/add-comment',
+        'pattern' => '/{categorySlug}/{topicSlug}/add-comment',
         'paths' => [
             'namespace' => 'App\Forum\Comment\Controllers',
             'controller' => 'add',
@@ -13,7 +13,7 @@ return [
         'httpMethods' => ['GET', 'POST'],
     ],
     'comment:delete' => [
-        'pattern' => '/comments/:id/delete',
+        'pattern' => '/comments/{id}/delete',
         'paths' => [
             'namespace' => 'App\Forum\Comment\Controllers',
             'controller' => 'delete',
@@ -22,7 +22,7 @@ return [
         'httpMethods' => ['GET'],
     ],
     'comment:edit' => [
-        'pattern' => '/comments/:id/edit',
+        'pattern' => '/comments/{id}',
         'paths' => [
             'namespace' => 'App\Forum\Comment\Controllers',
             'controller' => 'edit',

@@ -3,35 +3,37 @@
 <head>
   <title>{{ appName }}</title>
   <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
+  <style>
+      a {
+          color: #135083;
+      }
+  </style>
 </head>
 <body>
-<div class="container">
-  <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
-    <a href="/" class="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none">{{ appName }}</a>
-
-    <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-      <li><a href="/" class="nav-link px-2 link-secondary">Home</a></li>
-      <li><a href="/add-category" class="nav-link px-2 link-dark">Add category</a></li>
-    </ul>
-
-    <div class="col-md-3 text-end">
-      <a href="/login" class="btn btn-outline-primary me-2">Login</a>
-    </div>
+<div class="container" style="max-width: 720px">
+  <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-3 mt-3">
+    <a href="/" class="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none">. . .</a>
   </header>
 
-  <div>
-    <form action="/login" method="post">
-      <div class="mb-3">
-        <label for="nameInput" class="form-label">Name</label>
-        <input type="text" class="form-control" id="nameInput" name="name" />
-      </div>
-      <div class="mb-3">
-        <label for="passwordInput" class="form-label">Password</label>
-        <input type="password" class="form-control" id="passwordInput" name="password" />
-      </div>
-      <button type="submit" class="btn btn-primary">Submit</button>
-    </form>
-  </div>
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="/">Home</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Login</li>
+    </ol>
+  </nav>
+
+  <h1 class="card-title" style="margin-bottom: 2rem">Login</h1>
+
+  <form action="/login" method="post" style="margin-bottom: 2rem">
+    <div class="mb-3">
+      <input class="form-control" name="name" placeholder="Name" />
+    </div>
+    <div class="mb-3">
+      <input class="form-control" name="password" type="password" placeholder="Password" />
+    </div>
+    <button type="submit" class="btn btn-primary">Login</button>
+  </form>
+
 </div>
 </body>
 </html>

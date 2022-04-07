@@ -11,6 +11,8 @@ final class LogoutController extends \Phalcon\Mvc\Controller
     public function execAction(): void
     {
         $this->getAuth()->logout();
+
+        $this->response->redirect('/');
     }
 
     private function getAuth(): Auth

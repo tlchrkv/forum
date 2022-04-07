@@ -79,6 +79,11 @@ $diContainer->set('view', function () {
         },
     ]);
     $view->appName = getenv('APP_NAME');
+    $view->categoryAccess = new \App\Access\Models\AccessChecker\Forum\CategoryAccessChecker();
+    $view->commentAccess = new \App\Access\Models\AccessChecker\Forum\CommentAccessChecker();
+    $view->topicAccess = new \App\Access\Models\AccessChecker\Forum\TopicAccessChecker();
+    $view->userAccess = new \App\Access\Models\AccessChecker\User\AccessChecker();
+    $view->user = (new \App\Auth\Models\Auth())->getUserFromSession();
     return $view;
 });
 

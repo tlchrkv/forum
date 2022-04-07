@@ -35,7 +35,7 @@ final class CategoryAccessChecker
         return false;
     }
 
-    public function canChange(UuidInterface $categoryId, UuidInterface $authorId): bool
+    public function canDelete(): bool
     {
         $user = $this->auth->getUserFromSession();
 
@@ -43,8 +43,19 @@ final class CategoryAccessChecker
             return false;
         }
 
-        if ($authorId->toString() === $user->id) {
+        if ($user->role === Role::admin()->value) {
             return true;
+        }
+
+        return false;
+    }
+
+    public function canChange($categoryId): bool
+    {
+        $user = $this->auth->getUserFromSession();
+
+        if ($user === null) {
+            return false;
         }
 
         if ($user->role === Role::admin()->value) {
@@ -52,7 +63,7 @@ final class CategoryAccessChecker
         }
 
         if ($user->role === Role::moderator()->value) {
-            return in_array($categoryId->toString(), $this->categoryIdsGetter->exec());
+            return in_array($categoryId, $this->categoryIdsGetter->exec());
         }
 
         return false;

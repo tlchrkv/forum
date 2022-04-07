@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace App\Forum\Category\Models;
 
+use App\Forum\Topic\Models\TopicRepository;
 use App\SharedKernel\StringConverter;
 use Ramsey\Uuid\UuidInterface;
+use Phalcon\Mvc\Model\Resultset;
 
 final class Category extends \Phalcon\Mvc\Model
 {
@@ -35,5 +37,15 @@ final class Category extends \Phalcon\Mvc\Model
         $this->updated_by = $userId;
 
         $this->save();
+    }
+
+    public function getLastTopics(int $count): Resultset
+    {
+        return $this->getTopicRepository()->findLastByCategoryId($this->id, $count);
+    }
+
+    private function getTopicRepository(): TopicRepository
+    {
+        return new TopicRepository();
     }
 }

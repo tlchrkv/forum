@@ -2,57 +2,80 @@
 <html lang="en">
 <head>
   <title>{{ appName }}</title>
-  <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
-  <style>
-    a {
-        color: #135083;
-    }
-  </style>
+  <link rel="stylesheet" href="/assets/css/material-icons.css">
+  <link rel="stylesheet" href="/assets/css/shared.css">
+  <link rel="stylesheet" href="/assets/css/header.css">
+  <link rel="stylesheet" href="/assets/css/content.css">
 </head>
 <body>
-  <div class="container" style="max-width: 720px">
-    <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-3 mt-3">
-      <a href="/" class="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none">. . .</a>
 
-      <div class="col-md-3 text-end">
+  <header>
+    <div class="page-box header-main">
+      <div class="header-logo">
+        <img src="/assets/png/logo.png" />
+        <span>Forumium</span>
+      </div>
+      {% if user is not null %}
+        <div class="username">
+          <span>{{ user.name }}</span>
+          <span class="material-icons-outlined">account_circle</span>
+        </div>
+      {% endif %}
+    </div>
+
+    <div class="page-box header-menu">
+      <div>
+        <span class="margin-right-8 text-primary">FORUM</span>
+        {% if userAccess.canManageUsers() %}
+          <a class="margin-right-8 text-gray" href="/users">USERS</a>
+        {% endif %}
         {% if user is null %}
-          <a href="/login" class="text-dark text-decoration-none">Login</a>
+          <a class="text-gray" href="/login">LOGIN</a>
         {% else %}
-          <span style="color: gray">{{ user.name }}</span>
-          <span style="color: gray"> | </span>
-          {% if userAccess.canManageUsers() %}
-            <a href="/users" class="text-dark text-decoration-none">Users</a>
-            <span style="color: gray"> | </span>
-          {% endif %}
-          <a href="/logout" class="text-dark text-decoration-none">Logout</a>
+          <a class="text-gray" href="/logout">LOGOUT</a>
         {% endif %}
       </div>
-    </header>
+    </div>
+  </header>
 
-    <div>
-      <h1 class="card-title" style="margin-bottom: 2rem">All categories</h1>
+  <main>
+    <div class="page-box">
+      <h1>Categories</h1>
 
       {% if categoryAccess.canAdd() %}
-        <a href="/add-category" class="btn btn-primary" style="margin-bottom: 2rem">New category</a>
+        <a class="over-list-button" href="/add-category">
+          <div>Add category</div>
+          <span class="icon material-icons">add</span>
+        </a>
       {% endif %}
 
       {% for category in categories %}
-        <div class="card" style="margin-bottom: 1rem;">
-          <div class="card-body" style="padding: 2rem;">
-            <h3 class="card-title" style="margin-bottom: 1rem">
-              <a style="text-decoration: none;" href="/{{ category.slug }}">{{ category.name }}</a>
-            </h3>
-            <ul class="list-group list-group-flush">
-              {% for topic in category.getLastTopics(5) %}
-                <li class="list-group-item" >
-                  <a style="text-decoration: none;" href="/{{ category.slug }}/{{ topic.slug }}">{{ topic.name }}</a>
-                </li>
-              {% endfor %}
-            </ul>
-          </div>
+        <div class="title-box">
+          <h2 class="title">
+            <a href="/{{ category['slug'] }}">{{ category['name'] }}</a>
+          </h2>
+          <a class="title-sub" href="/{{ category['slug'] }}">See all {{ category['topics_count']}} topics</a>
         </div>
+
+        <div class="list">
+          {% for topic in category['last_topics'] %}
+            <a class="list-item" href="/{{ category['slug'] }}/{{ topic['slug'] }}">
+              <div>
+                <div>{{ topic['name'] }}</div>
+                <div class="list-item-sub">
+                  <span class="icon material-icons-outlined">mode_comment</span>
+                  <span>{{ topic['comments_count'] == 0 ? 'no comments yet' : topic['comments_count'] }}</span>
+                </div>
+              </div>
+              <span class="icon material-icons">keyboard_arrow_right</span>
+            </a>
+          {% endfor %}
+        </div>
+
       {% endfor %}
     </div>
-  </div>
+  </main>
+
+  <br/>
 </body>
 </html>

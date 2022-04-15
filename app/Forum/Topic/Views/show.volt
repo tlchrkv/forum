@@ -2,121 +2,122 @@
 <html lang="en">
 <head>
   <title>{{ appName }}</title>
-  <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
-  <style>
-      a {
-          color: #135083;
-          /*text-decoration: none;*/
-      }
-  </style>
+  <link rel="stylesheet" href="/assets/css/material-icons.css">
+  <link rel="stylesheet" href="/assets/css/shared.css">
+  <link rel="stylesheet" href="/assets/css/header.css">
+  <link rel="stylesheet" href="/assets/css/content.css">
 </head>
 <body>
-<div class="container" style="max-width: 720px">
-  <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-3 mt-3">
-    <a href="/" class="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none">. . .</a>
 
-    <div class="col-md-3 text-end">
-      {% if user is null %}
-        <a href="/login" class="text-dark text-decoration-none">Login</a>
-      {% else %}
-        <span style="color: gray">{{ user.name }}</span>
-        <span style="color: gray"> | </span>
-        {% if userAccess.canManageUsers() %}
-          <a href="/users" class="text-dark text-decoration-none">Users</a>
-          <span style="color: gray"> | </span>
-        {% endif %}
-        <a href="/logout" class="text-dark text-decoration-none">Logout</a>
-      {% endif %}
-    </div>
-  </header>
-
-  <nav aria-label="breadcrumb">
-    <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="/">All categories</a></li>
-      <li class="breadcrumb-item"><a href="/{{ category.slug }}">{{ category.name }}</a></li>
-      <li class="breadcrumb-item active" aria-current="page">{{ topic.name }}</li>
-    </ol>
-  </nav>
-
-  <h1 class="card-title" style="margin-bottom: 2rem">{{ topic.name }}</h1>
-
-  <div class="" style="margin-bottom: 2rem;">
-    <div class="">
-      {{ topic.content }}
-    </div>
-    <div class="d-flex" style="margin-top: 1rem">
-      {% if topicAccess.canChange(topic.category_id, topic.created_by) %}
-        <a href="/topics/{{ topic.id }}" style="margin-right: 5px">Edit</a>
-      {% endif %}
-      {% if topicAccess.canDelete(topic.category_id, topic.created_by) %}
-        <a href="/topics/{{ topic.id }}/delete" style="margin-right: 5px">Delete</a>
-      {% endif %}
-    </div>
-  </div>
-
-  {% if comments|length > 0 %}
-
-  <h4 class="card-title" style="margin-bottom: 1rem;">Comments</h4>
-
-  {% for comment in comments %}
-    <div class="" style="margin-bottom: 1rem;">
-      <div class="">
-        <div class="d-flex justify-content-between">
-          <div class="fw-bold">{{ comment.created_by is null ? 'anonymous' : comment.getAuthorName() }}</div>
-          <div>
-            {% if commentAccess.canChange(category.id, comment.created_by) %}
-              <a href="/comments/{{ comment.id }}" style="margin-right: 5px">Edit</a>
-            {% endif %}
-            {% if commentAccess.canDelete(category.id, comment.created_by) %}
-              <a href="/comments/{{ comment.id }}/delete" style="margin-right: 5px">Delete</a>
-            {% endif %}
-            <a href="/{{ categorySlug }}/{{ topicSlug }}/add-comment?reply_to={{ comment.id }}">Reply</a>
-          </div>
+  <section style="min-height: calc(100vh - 340px)">
+    <header>
+      <div class="page-box header-main">
+        <div class="header-logo">
+          <img src="/assets/png/logo.png" />
+          <span>Forumium</span>
         </div>
-        <div style="font-size: 14px; color: gray">{{ comment.getReadableDate() }}</div>
-        {% if comment.reply_to is not null %}
-          <div style="font-size: 14px;
-    font-style: italic;
-    margin-bottom: 4px;
-    margin-top: 4px;">
-            {% if comment.getReplyTo() is null %}
-              <div class="fw-bold">"Comment deleted"</div>
-            {% else %}
-              <div class="fw-bold">"{{ comment.getReplyTo().created_by is null ? 'anonymous' : comment.getReplyTo().getAuthorName() }}</div>
-              <div>{{ comment.getReplyTo().content }}"</div>
-            {% endif %}
+        {% if user is not null %}
+          <div class="username">
+            <span>{{ user.name }}</span>
+            <span class="material-icons-outlined">account_circle</span>
           </div>
         {% endif %}
-        <div>{{ comment.content }}</div>
       </div>
+
+      <div class="page-box header-menu">
+        <div>
+          <span class="margin-right-8 text-primary">FORUM</span>
+          {% if userAccess.canManageUsers() %}
+            <a class="margin-right-8 text-gray" href="/users">USERS</a>
+          {% endif %}
+          {% if user is null %}
+            <a class="text-gray" href="/login">LOGIN</a>
+          {% else %}
+            <a class="text-gray" href="/logout">LOGOUT</a>
+          {% endif %}
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <div class="page-box">
+        <h1 class="margin-bottom-8">{{ topic['name'] }}</h1>
+
+        <nav>
+          <ol class="breadcrumbs">
+            <li class="breadcrumbs-item">
+              <a href="/">Categories</a>
+            </li>
+            <li class="breadcrumbs-item">
+              <a href="/{{ category['slug'] }}">{{ category['name'] }}</a>
+            </li>
+            <li class="breadcrumbs-item active">{{ topic['name'] }}</li>
+          </ol>
+        </nav>
+
+{#        <div>#}
+{#          <div style="display: flex;align-items: center;color: #6c757d;">#}
+{#            <span class="material-icons-outlined" style="font-size: 20px; margin-right: 4px;">account_circle</span>#}
+{#            <span>mumbarak</span>#}
+{#          </div>#}
+{#        </div>#}
+
+        <div style="margin-top: 20px; margin-bottom: 20px;">{{ topic['content'] }}</div>
+
+        {% if comments|length > 0 %}
+          <div class="title-box">
+            <h2 class="title">Comments</h2>
+            <span class="title-sub">26</span>
+          </div>
+
+          <div class="list">
+            {% for comment in comments %}
+              <div class="list-item">
+                <div>
+                  <div>{{ comment.content }}</div>
+                  <div class="list-item-sub">
+                    <span>author</span>
+                  </div>
+                </div>
+                <div>
+                  <a href="#" class="icon material-icons">edit</a>
+                  {#            <a href="#" class="material-icons">delete</a>#}
+                  <a href="#" class="icon material-icons">reply</a>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        {% endif %}
+
+        {% if pages > 1 %}
+          <div class="pagination">
+            <span>{{ page }} of {{ pages }} pages</span>
+            <div>
+              {% if page > 1 %}
+                <a class="pagination-action" href="/{{ category['slug'] }}/{{ topic['slug'] }}?page={{ page - 1 }}">Back</a>
+              {% endif %}
+              {% if page < pages %}
+                <a class="pagination-action" href="/{{ category['slug'] }}/{{ topic['slug'] }}?page={{ page + 1 }}">Next</a>
+              {% endif %}
+            </div>
+          </div>
+        {% endif %}
+      </div>
+    </main>
+  </section>
+
+  <footer class="light-gray-background vertical-padding-40 margin-top-24">
+    <div class="page-box">
+      <h2>Add comment</h2>
+{#      <div class="title-sub margin-bottom-16">#}
+{#        <span class="icon material-icons-outlined margin-right-4">account_circle</span>#}
+{#        <span>Anonymous</span>#}
+{#      </div>#}
+      <div>
+        <textarea class="input" rows="3" placeholder="Type your comment here..."></textarea>
+      </div>
+      <button class="button">Add comment</button>
     </div>
-  {% endfor %}
-
-  {% endif %}
-
-  {% if pages > 1 %}
-
-  <nav style="margin-top: 2rem">
-    <ul class="pagination">
-      {% for i in 1..pages %}
-        <li class="page-item {% if page is i %} active {% endif %}">
-          <a class="page-link" href="/{{ categorySlug }}/{{ topicSlug }}?page={{ i }}">{{ i }}</a>
-        </li>
-      {% endfor %}
-    </ul>
-  </nav>
-
-  {% endif %}
-
-  <h4 class="card-title" style="margin-bottom: 1rem;margin-top: 2rem">Add comment</h4>
-
-  <form action="/{{ categorySlug }}/{{ topicSlug }}/add-comment" method="post" style="margin-bottom: 2rem">
-    <div class="mb-3">
-      <textarea class="form-control" id="commentContent" rows="3" name="content" placeholder="Write here..."></textarea>
-    </div>
-    <button type="submit" class="btn btn-primary">Add comment</button>
-  </form>
-
-</div>
+  </footer>
 </body>
 </html>

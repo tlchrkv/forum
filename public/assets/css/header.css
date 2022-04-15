@@ -1,0 +1,26 @@
+.header-main {
+    display: flex;
+    justify-content: space-between;
+    height: 40px;
+    align-items: center;
+    margin-top: 16px;
+}
+.header-logo {
+    font-weight: bold;
+    font-size: 24px;
+    color: #6521ff;
+    display: flex;
+    align-items: center;
+}
+.header-logo > img {
+    height: 22px;
+    margin-right: 6px;
+}
+.header-menu {
+    font-size: 13px;
+    font-weight: 500;
+    height: 28px;
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+}

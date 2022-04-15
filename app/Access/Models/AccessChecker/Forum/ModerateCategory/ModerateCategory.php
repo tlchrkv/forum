@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Access\Models\AccessChecker\Forum\ModerateCategory;
 
 use App\Forum\Category\Models\Category;
-use App\Forum\Category\Models\CategoryRepository;
+use App\Forum\Category\Models\CategoryWriteRepository;
 
 final class ModerateCategory extends \Phalcon\Mvc\Model
 {
@@ -26,6 +26,6 @@ final class ModerateCategory extends \Phalcon\Mvc\Model
 
     public function getCategory(): Category
     {
-        return (new CategoryRepository())->get($this->category_id);
+        return (new CategoryWriteRepository())->get($this->category_id);
     }
 }

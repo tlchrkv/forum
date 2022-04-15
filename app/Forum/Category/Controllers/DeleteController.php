@@ -6,7 +6,7 @@ namespace App\Forum\Category\Controllers;
 
 use App\Access\Models\AccessChecker\Forum\CategoryAccessChecker;
 use App\Access\Models\Forbidden;
-use App\Forum\Category\Models\CategoryRepository;
+use App\Forum\Category\Models\CategoryWriteRepository;
 use Ramsey\Uuid\Uuid;
 
 final class DeleteController extends \Phalcon\Mvc\Controller
@@ -23,9 +23,9 @@ final class DeleteController extends \Phalcon\Mvc\Controller
         $this->response->redirect('/');
     }
 
-    private function getCategoryRepository(): CategoryRepository
+    private function getCategoryRepository(): CategoryWriteRepository
     {
-        return new CategoryRepository();
+        return new CategoryWriteRepository();
     }
 
     private function getCategoryAccessChecker(): CategoryAccessChecker

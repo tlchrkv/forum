@@ -6,9 +6,9 @@ namespace App\Forum\Comment\Controllers;
 
 use App\Access\Models\AccessChecker\Forum\CommentAccessChecker;
 use App\Access\Models\Forbidden;
-use App\Forum\Category\Models\CategoryRepository;
+use App\Forum\Category\Models\CategoryWriteRepository;
 use App\Forum\Comment\Models\CommentRepository;
-use App\Forum\Topic\Models\TopicRepository;
+use App\Forum\Topic\Models\TopicWriteRepository;
 
 final class DeleteController extends \Phalcon\Mvc\Controller
 {
@@ -32,9 +32,9 @@ final class DeleteController extends \Phalcon\Mvc\Controller
         return new CommentAccessChecker();
     }
 
-    private function getTopicRepository(): TopicRepository
+    private function getTopicRepository(): TopicWriteRepository
     {
-        return new TopicRepository();
+        return new TopicWriteRepository();
     }
 
     private function getCommentRepository(): CommentRepository
@@ -42,8 +42,8 @@ final class DeleteController extends \Phalcon\Mvc\Controller
         return new CommentRepository();
     }
 
-    private function getCategoryRepository(): CategoryRepository
+    private function getCategoryRepository(): CategoryWriteRepository
     {
-        return new CategoryRepository();
+        return new CategoryWriteRepository();
     }
 }

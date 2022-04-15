@@ -210,31 +210,86 @@
 </header>
 
 <main class="container main">
-  <h1>Add topic</h1>
+  <h1>{{ topic.name }}</h1>
 
   <nav>
     <ol class="breadcrumb">
       <li class="breadcrumb-item"><a href="/">Categories</a></li>
       <li class="breadcrumb-item"><a href="/{{ category.slug }}">{{ category.name }}</a></li>
-      <li class="breadcrumb-item active" aria-current="page">Add topic</li>
+      <li class="breadcrumb-item active" aria-current="page">{{ topic.name }}</li>
     </ol>
   </nav>
 
   <div>
-    <div style="
-    /*font-size: 13px;*/
-    /*text-transform: uppercase;*/
+    <div style="display: flex;align-items: center;color: #6c757d;">
+      <span class="material-icons-outlined" style="font-size: 20px; margin-right: 4px;">account_circle</span>
+      <span>mumbarak</span>
+    </div>
+  </div>
+
+  <div style="margin-top: 20px; margin-bottom: 20px;">{{ topic.content }}</div>
+
+  {% if comments|length > 0 %}
+    <div class="comments-header" style="display: flex; align-items: center;">
+      <h4 style="margin-right: 8px">Comments</h4>
+      <span style="font-size: 13px;
+    font-weight: 500;
     color: #adafb3;
-    display: flex; align-items: center;margin-bottom: 32px;">
+    text-transform: uppercase;
+    margin-bottom: 4px;">26</span>
+    </div>
+
+    <div class="topics">
+      {% for comment in comments %}
+        <div class="topic">
+          <div>
+            <div>{{ comment.content }}</div>
+            <div class="comments-count">
+              <span>author</span>
+{#              <span>Today at 6:30 PM</span>#}
+            </div>
+          </div>
+          <div>
+            <a href="#" class="material-icons">edit</a>
+{#            <a href="#" class="material-icons">delete</a>#}
+            <a href="#" class="material-icons">reply</a>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  {% if pages > 1 %}
+    <div class="next-pagination" style="align-items: center;">
+      <span>{{ page }} of {{ pages }} pages</span>
+      <div style="display: flex;">
+        {% if page > 1 %}
+          <a href="/{{ categorySlug }}/{{ topicSlug }}?page={{ page - 1 }}">Back</a>
+        {% endif %}
+        {% if page < pages %}
+          <a href="/{{ categorySlug }}/{{ topicSlug }}?page={{ page + 1 }}">Next</a>
+        {% endif %}
+      </div>
+    </div>
+  {% endif %}
+
+</main>
+
+<footer class="footer" style="padding-top: 40px;
+    padding-bottom: 40px;
+    background-color: #fcfcfc;">
+  <div class="container">
+    <div style="margin-bottom: 16px;
+    font-size: 13px;
+    text-transform: uppercase;
+    color: #adafb3;
+    display: flex; align-items: center;">
       <span class="material-icons-outlined" style="font-size: 20px;
     margin-right: 4px;">account_circle</span>
-      <span>anonymous</span>
-    </div>
-    <div style="margin-bottom: 16px">
-      <input class="form-control" placeholder="Name" />
+      <span>Anonymous</span>
     </div>
     <div>
-      <textarea class="form-control" rows="9" placeholder="Content"></textarea>
+      <textarea class="form-control" rows="3"></textarea>
     </div>
     <div>
       <button style="display: flex;
@@ -248,11 +303,9 @@
     margin-top: 16px;
     border: none;
     background-color: #6521ff;
-    color: white;">Add topic</button>
+    color: white;">Add comment</button>
     </div>
   </div>
-</main>
-
-<footer class="footer"</footer>
+</footer>
 </body>
 </html>

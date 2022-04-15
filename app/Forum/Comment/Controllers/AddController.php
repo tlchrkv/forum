@@ -7,10 +7,10 @@ namespace App\Forum\Comment\Controllers;
 use App\Access\Models\AccessChecker\Forum\CommentAccessChecker;
 use App\Access\Models\Forbidden;
 use App\Auth\Models\Auth;
-use App\Forum\Category\Models\CategoryRepository;
+use App\Forum\Category\Models\CategoryWriteRepository;
 use App\Forum\Comment\Models\Comment;
 use App\Forum\Comment\Models\CommentRepository;
-use App\Forum\Topic\Models\TopicRepository;
+use App\Forum\Topic\Models\TopicWriteRepository;
 use App\SharedKernel\Http\Validation;
 use Ramsey\Uuid\Uuid;
 
@@ -72,14 +72,14 @@ final class AddController extends \Phalcon\Mvc\Controller
         return new CommentRepository();
     }
 
-    private function getCategoryRepository(): CategoryRepository
+    private function getCategoryRepository(): CategoryWriteRepository
     {
-        return new CategoryRepository();
+        return new CategoryWriteRepository();
     }
 
-    private function getTopicRepository(): TopicRepository
+    private function getTopicRepository(): TopicWriteRepository
     {
-        return new TopicRepository();
+        return new TopicWriteRepository();
     }
 
     private function getCommentAccessChecker(): CommentAccessChecker

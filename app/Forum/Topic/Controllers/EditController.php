@@ -7,8 +7,8 @@ namespace App\Forum\Topic\Controllers;
 use App\Access\Models\AccessChecker\Forum\TopicAccessChecker;
 use App\Access\Models\Forbidden;
 use App\Auth\Models\Auth;
-use App\Forum\Category\Models\CategoryRepository;
-use App\Forum\Topic\Models\TopicRepository;
+use App\Forum\Category\Models\CategoryWriteRepository;
+use App\Forum\Topic\Models\TopicWriteRepository;
 use App\SharedKernel\Http\Validation;
 
 final class EditController extends \Phalcon\Mvc\Controller
@@ -56,13 +56,13 @@ final class EditController extends \Phalcon\Mvc\Controller
         return new Auth();
     }
 
-    private function getCategoryRepository(): CategoryRepository
+    private function getCategoryRepository(): CategoryWriteRepository
     {
-        return new CategoryRepository();
+        return new CategoryWriteRepository();
     }
 
-    private function getTopicRepository(): TopicRepository
+    private function getTopicRepository(): TopicWriteRepository
     {
-        return new TopicRepository();
+        return new TopicWriteRepository();
     }
 }

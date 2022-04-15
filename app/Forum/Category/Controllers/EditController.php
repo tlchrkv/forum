@@ -7,7 +7,7 @@ namespace App\Forum\Category\Controllers;
 use App\Access\Models\AccessChecker\Forum\CategoryAccessChecker;
 use App\Access\Models\Forbidden;
 use App\Auth\Models\Auth;
-use App\Forum\Category\Models\CategoryRepository;
+use App\Forum\Category\Models\CategoryWriteRepository;
 use App\SharedKernel\Http\Validation;
 use Ramsey\Uuid\Uuid;
 
@@ -54,8 +54,8 @@ final class EditController extends \Phalcon\Mvc\Controller
         return new Auth();
     }
 
-    private function getCategoryRepository(): CategoryRepository
+    private function getCategoryRepository(): CategoryWriteRepository
     {
-        return new CategoryRepository();
+        return new CategoryWriteRepository();
     }
 }

@@ -2,82 +2,93 @@
 <html lang="en">
 <head>
   <title>{{ appName }}</title>
-  <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
-  <style>
-      a {
-          color: #135083;
-      }
-  </style>
+  <link rel="stylesheet" href="/assets/css/material-icons.css">
+  <link rel="stylesheet" href="/assets/css/shared.css">
+  <link rel="stylesheet" href="/assets/css/header.css">
+  <link rel="stylesheet" href="/assets/css/content.css">
 </head>
 <body>
-<div class="container" style="max-width: 720px">
-  <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-3 mt-3">
-    <a href="/" class="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none">. . .</a>
 
-    <div class="col-md-3 text-end">
-      {% if user is null %}
-        <a href="/login" class="text-dark text-decoration-none">Login</a>
-      {% else %}
-        <span style="color: gray">{{ user.name }}</span>
-        <span style="color: gray"> | </span>
-        {% if userAccess.canManageUsers() %}
-          <a href="/users" class="text-dark text-decoration-none">Users</a>
-          <span style="color: gray"> | </span>
-        {% endif %}
-        <a href="/logout" class="text-dark text-decoration-none">Logout</a>
+  <header>
+    <div class="page-box header-main">
+      <div class="header-logo">
+        <img src="/assets/png/logo.png" />
+        <span>Forumium</span>
+      </div>
+      {% if user is not null %}
+        <div class="username">
+          <span>{{ user.name }}</span>
+          <span class="material-icons-outlined">account_circle</span>
+        </div>
       {% endif %}
+    </div>
+
+    <div class="page-box header-menu">
+      <div>
+        <span class="margin-right-8 text-primary">FORUM</span>
+        {% if userAccess.canManageUsers() %}
+          <a class="margin-right-8 text-gray" href="/users">USERS</a>
+        {% endif %}
+        {% if user is null %}
+          <a class="text-gray" href="/login">LOGIN</a>
+        {% else %}
+          <a class="text-gray" href="/logout">LOGOUT</a>
+        {% endif %}
+      </div>
     </div>
   </header>
 
-  <nav aria-label="breadcrumb">
-    <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="/">All categories</a></li>
-      <li class="breadcrumb-item active" aria-current="page">{{ category.name }}</li>
-    </ol>
-  </nav>
+  <main>
+    <div class="page-box">
+      <h1 class="margin-bottom-8">{{ category['name'] }}</h1>
 
-  <h1 class="card-title" style="margin-bottom: 1rem">{{ category.name }}</h1>
-
-  <div class="d-flex" style="margin-bottom: 2rem">
-    {% if categoryAccess.canChange(category.id) %}
-      <a href="/categories/{{ category.id }}" style="margin-right: 5px">Edit</a>
-    {% endif %}
-
-    {% if categoryAccess.canDelete() %}
-      <a href="/categories/{{ category.id }}/delete" style="margin-right: 5px">Delete</a>
-    {% endif %}
-  </div>
-
-  {% if topicAccess.canAdd() %}
-    <a href="/{{ category.slug }}/add-topic" class="btn btn-primary" style="margin-bottom: 2rem">New topic</a>
-  {% endif %}
-
-  <div class="" style="margin-bottom: 1rem;">
-    <div class="" style="">
-      <ul class="list-group list-group-flush">
-        {% for topic in topics %}
-          <li class="list-group-item">
-            <a style="text-decoration: none;" href="/{{ category.slug }}/{{ topic.slug }}">{{ topic.name }}</a>
+      <nav>
+        <ol class="breadcrumbs">
+          <li class="breadcrumbs-item">
+            <a href="/">Categories</a>
           </li>
+          <li class="breadcrumbs-item active">{{ category['name'] }}</li>
+        </ol>
+      </nav>
+
+      {% if topicAccess.canAdd() %}
+        <a class="over-list-button" href="/{{ category['slug'] }}/add-topic">
+          <div>Add topic</div>
+          <span class="icon material-icons">add</span>
+        </a>
+      {% endif %}
+
+      <div class="list">
+        {% for topic in topics %}
+          <a class="list-item" href="/{{ category['slug'] }}/{{ topic['slug'] }}">
+            <div>
+              <div>{{ topic['name'] }}</div>
+              <div class="list-item-sub">
+                <span class="icon material-icons-outlined">mode_comment</span>
+                <span>{{ topic['comments_count'] == 0 ? 'no comments yet' : topic['comments_count'] }}</span>
+              </div>
+            </div>
+            <span class="icon material-icons">keyboard_arrow_right</span>
+          </a>
         {% endfor %}
-      </ul>
+      </div>
+
+      {% if pages > 1 %}
+        <div class="pagination">
+          <span>{{ page }} of {{ pages }} pages</span>
+          <div>
+            {% if page > 1 %}
+              <a class="pagination-action" href="/{{ category['slug'] }}?page={{ page - 1 }}">Back</a>
+            {% endif %}
+            {% if page < pages %}
+              <a class="pagination-action" href="/{{ category['slug'] }}?page={{ page + 1 }}">Next</a>
+            {% endif %}
+          </div>
+        </div>
+      {% endif %}
     </div>
-  </div>
+  </main>
 
-  {% if pages > 1 %}
-
-  <nav style="margin-top: 2rem; margin-bottom: 2rem">
-    <ul class="pagination">
-      {% for i in 1..pages %}
-        <li class="page-item {% if page is i %} active {% endif %}">
-          <a class="page-link" href="/{{ category.slug }}?page={{ i }}">{{ i }}</a>
-        </li>
-      {% endfor %}
-    </ul>
-  </nav>
-
-  {% endif %}
-
-</div>
+  <br/>
 </body>
 </html>

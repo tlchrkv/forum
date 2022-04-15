@@ -8,7 +8,7 @@ use App\Access\Models\AccessChecker\Access\AccessChecker;
 use App\Access\Models\AccessChecker\Forum\ModerateCategory\ModerateCategoryRepository;
 use App\Access\Models\Forbidden;
 use App\Auth\Models\Auth;
-use App\Forum\Category\Models\CategoryRepository;
+use App\Forum\Category\Models\CategoryWriteRepository;
 use App\SharedKernel\Http\Validation;
 use App\User\Models\UserRepository;
 

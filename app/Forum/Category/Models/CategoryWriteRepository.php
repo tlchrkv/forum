@@ -5,9 +5,8 @@ declare(strict_types=1);
 namespace App\Forum\Category\Models;
 
 use Phalcon\Mvc\Model\Resultset;
-use Ramsey\Uuid\UuidInterface;
 
-final class CategoryRepository
+final class CategoryWriteRepository
 {
     public function get($id): Category
     {

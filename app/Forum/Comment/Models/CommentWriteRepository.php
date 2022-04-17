@@ -8,7 +8,7 @@ use App\SharedKernel\TimeSorting;
 use Phalcon\Mvc\Model\Resultset;
 use Ramsey\Uuid\UuidInterface;
 
-final class CommentRepository
+final class CommentWriteRepository
 {
     public function get($id): Comment
     {

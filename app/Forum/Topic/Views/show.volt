@@ -9,31 +9,33 @@
 </head>
 <body>
 
-  <section style="min-height: calc(100vh - 340px)">
+  <section>
     <header>
       <div class="page-box header-main">
         <div class="header-logo">
-          <img src="/assets/png/logo.png" />
-          <span>Forumium</span>
+          <span>{{ appName }}</span>
         </div>
         {% if user is not null %}
-          <div class="username">
-            <span>{{ user.name }}</span>
-            <span class="material-icons-outlined">account_circle</span>
+          <div class="username" style="display: flex;
+    align-items: center;
+    color: #adafb3;text-transform: lowercase;
+    font-weight: 500;font-size: 15px;">
+            <span style="margin-right: 4px">{{ user.name }}</span>
+            <span class="material-icons-outlined">account_box</span>
           </div>
         {% endif %}
       </div>
 
       <div class="page-box header-menu">
         <div>
-          <span class="margin-right-8 text-primary">FORUM</span>
+          <span class="margin-right-8 text-primary">Topics</span>
           {% if userAccess.canManageUsers() %}
-            <a class="margin-right-8 text-gray" href="/users">USERS</a>
+            <a class="margin-right-8 text-gray" href="/users">Users</a>
           {% endif %}
           {% if user is null %}
-            <a class="text-gray" href="/login">LOGIN</a>
+            <a class="text-gray" href="/login">Login</a>
           {% else %}
-            <a class="text-gray" href="/logout">LOGOUT</a>
+            <a class="text-gray" href="/logout">Logout</a>
           {% endif %}
         </div>
       </div>
@@ -41,12 +43,19 @@
 
     <main>
       <div class="page-box">
-        <h1 class="margin-bottom-8">{{ topic['name'] }}</h1>
+        <div style="margin-top: 24px">
+          <div style="display: flex;align-items: center;color: #6c757d;text-transform: lowercase; font-weight: 500;">
+            <span class="material-icons-outlined" style="font-size: 20px; margin-right: 4px;">account_box</span>
+            <span>mumbarak</span>
+          </div>
+        </div>
+
+        <h1 class="page-name-editable" style="margin-top: 4px">{{ topic['name'] }}</h1>
 
         <nav>
           <ol class="breadcrumbs">
             <li class="breadcrumbs-item">
-              <a href="/">Categories</a>
+              <a href="/">All categories</a>
             </li>
             <li class="breadcrumbs-item">
               <a href="/{{ category['slug'] }}">{{ category['name'] }}</a>
@@ -55,69 +64,88 @@
           </ol>
         </nav>
 
-{#        <div>#}
-{#          <div style="display: flex;align-items: center;color: #6c757d;">#}
-{#            <span class="material-icons-outlined" style="font-size: 20px; margin-right: 4px;">account_circle</span>#}
-{#            <span>mumbarak</span>#}
-{#          </div>#}
-{#        </div>#}
+        <div style="margin-top: 20px; margin-bottom: 32px;">{{ topic['content'] }}</div>
 
-        <div style="margin-top: 20px; margin-bottom: 20px;">{{ topic['content'] }}</div>
-
-        {% if comments|length > 0 %}
-          <div class="title-box">
-            <h2 class="title">Comments</h2>
-            <span class="title-sub">26</span>
-          </div>
-
-          <div class="list">
-            {% for comment in comments %}
-              <div class="list-item">
-                <div>
-                  <div>{{ comment.content }}</div>
-                  <div class="list-item-sub">
-                    <span>author</span>
-                  </div>
-                </div>
-                <div>
-                  <a href="#" class="icon material-icons">edit</a>
-                  {#            <a href="#" class="material-icons">delete</a>#}
-                  <a href="#" class="icon material-icons">reply</a>
-                </div>
-              </div>
-            {% endfor %}
-          </div>
-        {% endif %}
-
-        {% if pages > 1 %}
-          <div class="pagination">
-            <span>{{ page }} of {{ pages }} pages</span>
-            <div>
-              {% if page > 1 %}
-                <a class="pagination-action" href="/{{ category['slug'] }}/{{ topic['slug'] }}?page={{ page - 1 }}">Back</a>
-              {% endif %}
-              {% if page < pages %}
-                <a class="pagination-action" href="/{{ category['slug'] }}/{{ topic['slug'] }}?page={{ page + 1 }}">Next</a>
-              {% endif %}
-            </div>
-          </div>
-        {% endif %}
       </div>
     </main>
   </section>
 
-  <footer class="light-gray-background vertical-padding-40 margin-top-24">
+  <section style="border-top: 8px solid #fcfcfc;padding-top: 16px;padding-bottom: 16px">
     <div class="page-box">
-      <h2>Add comment</h2>
-{#      <div class="title-sub margin-bottom-16">#}
-{#        <span class="icon material-icons-outlined margin-right-4">account_circle</span>#}
-{#        <span>Anonymous</span>#}
-{#      </div>#}
+      {% if comments|length > 0 %}
+        <div>
+          <div class="mini-title">Comments</div>
+        </div>
+
+        <div>
+          {% for comment in comments %}
+            <div class="comment" style="margin-top: 14px;padding-bottom: 14px;border-bottom: 1px solid #f7f7f7;margin-left: 4px">
+              <div class="comment-author" style="display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+    color: #adafb3;
+    font-size: 13px;text-transform: lowercase; font-weight: 500">
+                <span class="material-icons-outlined" style="font-size: 20px;
+    margin-right: 4px;">account_box</span>
+                <span>{{ comment['author_name'] }}</span>
+              </div>
+
+              <div class="comment-content" style="margin-bottom: 8px;margin-left: 1px">
+                {{ comment['content'] }}
+              </div>
+
+              <div class="comment-sub" style="display: flex; align-items: center;">
+                <a href="#" style="display: flex;
+    align-items: center;
+    margin-right: 12px;">
+                  <span class="icon material-icons" style="color: #adafb3; font-size: 14px;margin-right: 3px;">reply</span>
+                  <span style="color: #adafb3; font-size: 12px;">Reply</span>
+                </a>
+
+                <a href="#" style="display: flex;
+    align-items: center;
+    margin-right: 12px;">
+                  <span class="icon material-icons" style="color: #adafb3; font-size: 14px;margin-right: 3px;">edit</span>
+                  <span style="color: #adafb3; font-size: 12px;">Edit</span>
+                </a>
+
+                <a href="#" style="display: flex;
+    align-items: center;
+    margin-right: 12px;">
+                  <span class="icon material-icons" style="color: #adafb3; font-size: 14px;margin-right: 3px;">delete</span>
+                  <span style="color: #adafb3; font-size: 12px;">Delete</span>
+                </a>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      {% if pages > 1 %}
+        <div class="pagination">
+          <span>{{ page }} of {{ pages }} pages</span>
+          <div>
+            {% if page > 1 %}
+              <a class="pagination-action" href="/{{ category['slug'] }}/{{ topic['slug'] }}?page={{ page - 1 }}">Back</a>
+            {% endif %}
+            {% if page < pages %}
+              <a class="pagination-action" href="/{{ category['slug'] }}/{{ topic['slug'] }}?page={{ page + 1 }}">Next</a>
+            {% endif %}
+          </div>
+        </div>
+      {% endif %}
+    </div>
+  </section>
+
+  <section style="background-color: #fcfcfc;padding-top: 16px;padding-bottom: 16px;">
+    <div class="page-box">
+      <div class="mini-title">Add comment</div>
       <div>
         <textarea class="input" rows="3" placeholder="Type your comment here..."></textarea>
       </div>
       <button class="button">Add comment</button>
     </div>
-  </footer>
+  </section>
+
 </body>
 </html>

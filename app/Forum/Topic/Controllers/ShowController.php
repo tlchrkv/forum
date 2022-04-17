@@ -5,10 +5,8 @@ declare(strict_types=1);
 namespace App\Forum\Topic\Controllers;
 
 use App\Forum\Category\Models\CategoryReadRepository;
-use App\Forum\Comment\Models\CommentRepository;
+use App\Forum\Comment\Models\CommentReadRepository;
 use App\Forum\Topic\Models\TopicReadRepository;
-use App\SharedKernel\TimeSorting;
-use Ramsey\Uuid\Uuid;
 
 final class ShowController extends \Phalcon\Mvc\Controller
 {
@@ -19,12 +17,11 @@ final class ShowController extends \Phalcon\Mvc\Controller
         $category = $this->getCategoryReadRepository()->getBySlug($categorySlug);
         $topic = $this->getTopicReadRepository()->getByCategoryIdAndSlug($category['id'], $slug);
 
-        $comments = $this->getCommentRepository()
+        $comments = $this->getCommentReadRepository()
             ->findByTopicId(
-                Uuid::fromString($topic['id']),
-                TimeSorting::newest(),
-                $page,
-                5
+                $topic['id'],
+                10,
+                ($page - 1) * 10
             );
 
         echo $this->view->render(
@@ -36,7 +33,7 @@ final class ShowController extends \Phalcon\Mvc\Controller
                 'categorySlug' => $categorySlug,
                 'topicSlug' => $slug,
                 'page' => $page,
-                'pages' => ceil($this->getCommentRepository()->countByTopicId(Uuid::fromString($topic['id'])) / 5),
+                'pages' => ceil($this->getCommentReadRepository()->countByTopicId($topic['id']) / 5),
             ]
         );
     }
@@ -51,8 +48,8 @@ final class ShowController extends \Phalcon\Mvc\Controller
         return new TopicReadRepository();
     }
 
-    private function getCommentRepository(): CommentRepository
+    private function getCommentReadRepository(): CommentReadRepository
     {
-        return new CommentRepository();
+        return new CommentReadRepository();
     }
 }

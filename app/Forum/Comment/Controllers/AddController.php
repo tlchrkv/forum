@@ -9,7 +9,7 @@ use App\Access\Models\Forbidden;
 use App\Auth\Models\Auth;
 use App\Forum\Category\Models\CategoryWriteRepository;
 use App\Forum\Comment\Models\Comment;
-use App\Forum\Comment\Models\CommentRepository;
+use App\Forum\Comment\Models\CommentWriteRepository;
 use App\Forum\Topic\Models\TopicWriteRepository;
 use App\SharedKernel\Http\Validation;
 use Ramsey\Uuid\Uuid;
@@ -67,9 +67,9 @@ final class AddController extends \Phalcon\Mvc\Controller
         );
     }
 
-    private function getCommentRepository(): CommentRepository
+    private function getCommentRepository(): CommentWriteRepository
     {
-        return new CommentRepository();
+        return new CommentWriteRepository();
     }
 
     private function getCategoryRepository(): CategoryWriteRepository

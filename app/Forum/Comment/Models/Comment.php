@@ -63,7 +63,7 @@ final class Comment extends \Phalcon\Mvc\Model
         }
 
         try {
-            return (new CommentRepository())->get($this->reply_to);
+            return (new CommentWriteRepository())->get($this->reply_to);
         } catch (CommentNotFound $e) {
             return null;
         }

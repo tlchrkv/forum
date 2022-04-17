@@ -12,27 +12,29 @@
   <header>
     <div class="page-box header-main">
       <div class="header-logo">
-        <img src="/assets/png/logo.png" />
-        <span>Forumium</span>
+        <span>{{ appName }}</span>
       </div>
       {% if user is not null %}
-        <div class="username">
-          <span>{{ user.name }}</span>
-          <span class="material-icons-outlined">account_circle</span>
+        <div class="username" style="display: flex;
+    align-items: center;
+    color: #adafb3;text-transform: lowercase;
+    font-weight: 500;font-size: 15px;">
+          <span style="margin-right: 4px">{{ user.name }}</span>
+          <span class="material-icons-outlined">account_box</span>
         </div>
       {% endif %}
     </div>
 
     <div class="page-box header-menu">
       <div>
-        <span class="margin-right-8 text-primary">FORUM</span>
+        <span class="margin-right-8 text-primary">Topics</span>
         {% if userAccess.canManageUsers() %}
-          <a class="margin-right-8 text-gray" href="/users">USERS</a>
+          <a class="margin-right-8 text-gray" href="/users">Users</a>
         {% endif %}
         {% if user is null %}
-          <a class="text-gray" href="/login">LOGIN</a>
+          <a class="text-gray" href="/login">Login</a>
         {% else %}
-          <a class="text-gray" href="/logout">LOGOUT</a>
+          <a class="text-gray" href="/logout">Logout</a>
         {% endif %}
       </div>
     </div>
@@ -40,7 +42,7 @@
 
   <main>
     <div class="page-box">
-      <h1>Categories</h1>
+      <h1 class="page-name">All Categories</h1>
 
       {% if categoryAccess.canAdd() %}
         <a class="over-list-button" href="/add-category">

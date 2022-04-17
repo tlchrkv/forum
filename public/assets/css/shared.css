@@ -34,7 +34,7 @@ a:hover {
     color: #212529;
 }
 .text-primary {
-    color: #6521ff;
+    color: #f20000;
 }
 .margin-right-8 {
     margin-right: 8px;
@@ -102,14 +102,14 @@ li {
     text-transform: uppercase;
     margin-top: 16px;
     border: none;
-    background-color: #6521ff;
+    background-color: #f20000;
     color: white;
     cursor: pointer;
     transition: .15s;
     height: 46px;
 }
 .button:hover {
-    background-color: #5f25e4;
+    background-color: #dc0000;
     color: #fcfcfc;
 }
 .light-gray-background {

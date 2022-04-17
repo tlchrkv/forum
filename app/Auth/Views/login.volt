@@ -15,20 +15,22 @@
       <div class="width-100 max-width-280 margin-bottom-8">
         <div class="header-main">
           <div class="header-logo">
-            <img src="/assets/png/logo.png" />
-            <span>Forumium</span>
+            <span>{{ appName }}</span>
           </div>
           {% if user is not null %}
-            <div class="username">
-              <span>{{ user.name }}</span>
-              <span class="material-icons-outlined">account_circle</span>
+            <div class="username" style="display: flex;
+    align-items: center;
+    color: #adafb3;text-transform: lowercase;
+    font-weight: 500;font-size: 15px;">
+              <span style="margin-right: 4px">{{ user.name }}</span>
+              <span class="material-icons-outlined">account_box</span>
             </div>
           {% endif %}
         </div>
 
         <div class="header-menu">
           <div>
-            <a class="margin-right-8 text-gray" href="/">FORUM</a>
+            <a class="margin-right-8 text-gray" href="/">Topics</a>
             {% if userAccess.canManageUsers() %}
               <a class="margin-right-8 text-gray" href="/users">USERS</a>
             {% endif %}
@@ -37,15 +39,21 @@
         </div>
       </div>
 
-      <h1 class="width-100 max-width-280 margin-bottom-32">Login</h1>
+      <h1 class="width-100 max-width-280 margin-bottom-32 page-name" style="margin-top: 16px;
+    margin-bottom: 24px;">Login</h1>
 
-{#      <div class="message-box">#}
-
-{#      </div>#}
+      {% if error is not null %}
+      <div class="message-box max-width-280" style="color: #e30000;
+    width: 100%;
+    margin-top: -24px;height: auto;
+    margin-bottom: 8px;">
+        {{ error }}
+      </div>
+      {% endif %}
 
       <form method="post" class="width-100 max-width-280">
         <div>
-          <input class="input margin-bottom-16" name="username" placeholder="username" required />
+          <input class="input margin-bottom-16" name="name" placeholder="username" required />
         </div>
         <div>
           <input class="input margin-bottom-16" name="password" type="password" placeholder="password" required />

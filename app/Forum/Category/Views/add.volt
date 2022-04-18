@@ -2,49 +2,65 @@
 <html lang="en">
 <head>
   <title>{{ appName }}</title>
-  <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
-  <style>
-      a {
-          color: #135083;
-      }
-  </style>
+  <link rel="stylesheet" href="/assets/css/material-icons.css">
+  <link rel="stylesheet" href="/assets/css/shared.css">
+  <link rel="stylesheet" href="/assets/css/header.css">
+
+  <link rel="stylesheet" href="/assets/css/breadcrumbs.css">
+  <link rel="stylesheet" href="/assets/css/form.css">
+
+  <link rel="stylesheet" href="/assets/css/pages/add-category.css">
 </head>
 <body>
-<div class="container" style="max-width: 720px">
-  <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-3 mt-3">
-    <a href="/" class="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none">. . .</a>
 
-    <div class="col-md-3 text-end">
+<header>
+  <div class="page-box header-main">
+    <div class="header-logo">
+      <span>{{ appName }}</span>
+    </div>
+    {% if user is not null %}
+      <div class="username">
+        <span>{{ user.name }}</span>
+        <span class="material-icons-outlined">account_box</span>
+      </div>
+    {% endif %}
+  </div>
+
+  <div class="page-box header-menu">
+    <div>
+      <span class="margin-right-8 text-primary">Topics</span>
+      {% if userAccess.canManageUsers() %}
+        <a class="margin-right-8 text-gray" href="/users">Users</a>
+      {% endif %}
       {% if user is null %}
-        <a href="/login" class="text-dark text-decoration-none">Login</a>
+        <a class="text-gray" href="/login">Login</a>
       {% else %}
-        <span style="color: gray">{{ user.name }}</span>
-        <span style="color: gray"> | </span>
-        {% if userAccess.canManageUsers() %}
-          <a href="/users" class="text-dark text-decoration-none">Users</a>
-          <span style="color: gray"> | </span>
-        {% endif %}
-        <a href="/logout" class="text-dark text-decoration-none">Logout</a>
+        <a class="text-gray" href="/logout">Logout</a>
       {% endif %}
     </div>
-  </header>
+  </div>
+</header>
 
-  <nav aria-label="breadcrumb">
-    <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="/">All categories</a></li>
-      <li class="breadcrumb-item active" aria-current="page">Add category</li>
-    </ol>
-  </nav>
+<main>
+  <div class="page-box">
+    <h1 class="title">Add category</h1>
 
-  <h1 class="card-title" style="margin-bottom: 2rem">Add category</h1>
+    <nav>
+      <ol class="breadcrumbs">
+        <li class="breadcrumbs-item">
+          <a href="/">All categories</a>
+        </li>
+        <li class="breadcrumbs-item active">New</li>
+      </ol>
+    </nav>
 
-  <form action="/add-category" method="post" style="margin-bottom: 2rem">
-    <div class="mb-3">
-      <input class="form-control" name="name" placeholder="Category name" />
-    </div>
-    <button type="submit" class="btn btn-primary">Add category</button>
-  </form>
-
-</div>
+    <form action="/add-category" method="post">
+      <div>
+        <input class="form-input" name="name" placeholder="Name of the category" />
+      </div>
+      <button class="form-button" type="submit">Add category</button>
+    </form>
+  </div>
+</main>
 </body>
 </html>

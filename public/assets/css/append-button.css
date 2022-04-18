@@ -1,10 +1,9 @@
-.over-list-button {
+.append-button {
     margin-top: 20px;
-    margin-bottom: 4px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border: 1px solid rgba(0,0,0,.125);
+    border: 1px solid #eaeaea;
     padding: 12px 12px;
     border-radius: 0.25rem;
     font-size: 13px;
@@ -12,10 +11,10 @@
     color: #adafb3;
     text-transform: uppercase;
 }
-.over-list-button:hover {
+.append-button:hover {
     background-color: #fcfcfc;
 }
-.over-list-button > .icon {
+.append-button > .icon {
     color: #93989f;
     font-size: 20px;
 }

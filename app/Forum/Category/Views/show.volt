@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="/assets/css/content.css">
 
   <link rel="stylesheet" href="/assets/css/breadcrumbs.css">
+  <link rel="stylesheet" href="/assets/css/append-button.css">
   <link rel="stylesheet" href="/assets/css/clickable-list.css">
   <link rel="stylesheet" href="/assets/css/pagination.css">
 
@@ -45,7 +46,12 @@
 
   <main>
     <div class="page-box">
-      <h1 class="title">{{ category['name'] }}</h1>
+      <h1 class="title">
+        <span>{{ category['name'] }}</span>
+        {% if categoryAccess.canChange(category['id']) %}
+          <a href="/categories/{{ topic['id'] }}" class="icon material-icons">edit</a>
+        {% endif %}
+      </h1>
 
       <nav>
         <ol class="breadcrumbs">
@@ -57,7 +63,7 @@
       </nav>
 
       {% if topicAccess.canAdd() %}
-        <a class="over-list-button" href="/{{ category['slug'] }}/add-topic">
+        <a class="append-button margin-bottom-16" href="/{{ category['slug'] }}/add-topic">
           <div>Add topic</div>
           <span class="icon material-icons">add</span>
         </a>

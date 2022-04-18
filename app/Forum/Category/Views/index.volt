@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="/assets/css/header.css">
 
   <link rel="stylesheet" href="/assets/css/breadcrumbs.css">
+  <link rel="stylesheet" href="/assets/css/append-button.css">
   <link rel="stylesheet" href="/assets/css/clickable-list.css">
   <link rel="stylesheet" href="/assets/css/pagination.css">
 
@@ -47,7 +48,7 @@
       <h1 class="title">All Categories</h1>
 
       {% if categoryAccess.canAdd() %}
-        <a class="over-list-button" href="/add-category">
+        <a class="append-button" href="/add-category">
           <div>Add category</div>
           <span class="icon material-icons">add</span>
         </a>

@@ -44,10 +44,10 @@
     padding-bottom: 16px;
 }
 .comment {
-    margin-top: 14px;
-    padding-bottom: 14px;
+    margin-top: 12px;
+    padding-bottom: 12px;
     border-bottom: 1px solid #f7f7f7;
-    margin-left: 4px;
+    margin-left: 2px;
 }
 .comment:last-child {
     border-bottom: none;

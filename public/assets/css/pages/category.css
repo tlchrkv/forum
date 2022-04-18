@@ -4,3 +4,6 @@
     text-transform: capitalize;
     font-size: 38px;
 }
+.title > .icon {
+    color: #adafb3;
+}

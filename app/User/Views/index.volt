@@ -55,13 +55,15 @@
       {% for user in users %}
         <a class="clickable-list-item" href="/users/{{ user.id }}">
           <div>
-            <div>{{ user.name }}</div>
-            <div class="clickable-list-item-sub">
-              <span class="icon material-icons-outlined">group</span>
+            <div style="display: flex;align-items: center;">
+              <span class="icon material-icons-outlined" style="margin-right: 4px;margin-top: 2px;font-size: 18px;">account_box</span>
+              <span>{{ user.name }}</span>
+            </div>
+            <div class="clickable-list-item-sub" style="font-size: 13px; text-transform: uppercase;margin-top: 1px;margin-left: 2px;">
               <span>{{ user.role }}</span>
             </div>
           </div>
-          <span class="icon material-icons">edit</span>
+          <span class="icon material-icons-outlined">keyboard_arrow_right</span>
         </a>
       {% endfor %}
     </div>

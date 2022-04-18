@@ -1,0 +1,31 @@
+.clickable-list-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid #eaeaea;
+    border-bottom: none;
+    padding: 12px 12px;
+}
+a.clickable-list-item:hover {
+    background-color: #fcfcfc;
+}
+.clickable-list-item > .icon, .clickable-list-item > div > .icon {
+    color: #93989f;
+    font-size: 20px;
+}
+.clickable-list > .clickable-list-item:first-child {
+    border-radius: 0.25rem 0.25rem 0 0;
+}
+.clickable-list > .clickable-list-item:last-child {
+    border-radius: 0 0 0.25rem 0.25rem;
+    border-bottom: 1px solid #eaeaea;
+}
+.clickable-list-item-sub {
+    color: #93989f;
+    font-size: 14px;
+    margin-right: 8px;
+}
+.clickable-list-item-sub > .icon {
+    font-size: 14px;
+    vertical-align: sub;
+}

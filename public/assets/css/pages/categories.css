@@ -1,0 +1,30 @@
+.title {
+    color: #c6c8ca;
+    text-transform: uppercase;
+    margin-bottom: 0;
+    margin-top: 22px;
+}
+
+.secondary-title {
+    display: flex;
+    justify-content: flex-start;
+    align-items: end;
+    margin-bottom: 12px;
+    margin-top: 10px;
+}
+.secondary-title > h2 {
+    margin-top: 16px;
+    margin-bottom: 0;
+    margin-right: 8px;
+    font-size: 24px;
+}
+.secondary-title > h2 > a {
+    color: #212529 !important;
+}
+.secondary-title-action {
+    font-size: 13px;
+    font-weight: 500;
+    color: #adafb3;
+    margin-bottom: 2px;
+    text-transform: uppercase;
+}

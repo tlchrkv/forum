@@ -15,6 +15,7 @@ SELECT
        forum_comments.id,
        forum_comments.content,
        coalesce(users.name, 'anonymous') as author_name,
+       forum_comments.created_by as authour_id,
        forum_comments.created_at,
        forum_comments.reply_to as reply_to_id,
        reply_to.content as reply_to_content

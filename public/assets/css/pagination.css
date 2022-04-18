@@ -1,6 +1,13 @@
-.over-list-button {
+.pagination {
+    display: flex;
+    justify-content: space-between;
     margin-top: 20px;
-    margin-bottom: 4px;
+    align-items: center;
+}
+.pagination > div {
+    display: flex;
+}
+.pagination-action {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -12,10 +19,9 @@
     color: #adafb3;
     text-transform: uppercase;
 }
-.over-list-button:hover {
-    background-color: #fcfcfc;
+.pagination-action:first-child {
+    margin-right: 12px;
 }
-.over-list-button > .icon {
-    color: #93989f;
-    font-size: 20px;
+.pagination-action:last-child {
+    margin-right: 0;
 }

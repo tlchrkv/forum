@@ -5,7 +5,12 @@
   <link rel="stylesheet" href="/assets/css/material-icons.css">
   <link rel="stylesheet" href="/assets/css/shared.css">
   <link rel="stylesheet" href="/assets/css/header.css">
-  <link rel="stylesheet" href="/assets/css/content.css">
+
+  <link rel="stylesheet" href="/assets/css/breadcrumbs.css">
+  <link rel="stylesheet" href="/assets/css/clickable-list.css">
+  <link rel="stylesheet" href="/assets/css/pagination.css">
+
+  <link rel="stylesheet" href="/assets/css/pages/categories.css">
 </head>
 <body>
 
@@ -15,11 +20,8 @@
         <span>{{ appName }}</span>
       </div>
       {% if user is not null %}
-        <div class="username" style="display: flex;
-    align-items: center;
-    color: #adafb3;text-transform: lowercase;
-    font-weight: 500;font-size: 15px;">
-          <span style="margin-right: 4px">{{ user.name }}</span>
+        <div class="username">
+          <span>{{ user.name }}</span>
           <span class="material-icons-outlined">account_box</span>
         </div>
       {% endif %}
@@ -42,7 +44,7 @@
 
   <main>
     <div class="page-box">
-      <h1 class="page-name">All Categories</h1>
+      <h1 class="title">All Categories</h1>
 
       {% if categoryAccess.canAdd() %}
         <a class="over-list-button" href="/add-category">
@@ -52,19 +54,19 @@
       {% endif %}
 
       {% for category in categories %}
-        <div class="title-box">
-          <h2 class="title">
+        <div class="secondary-title">
+          <h2>
             <a href="/{{ category['slug'] }}">{{ category['name'] }}</a>
           </h2>
-          <a class="title-sub" href="/{{ category['slug'] }}">See all {{ category['topics_count']}} topics</a>
+          <a class="secondary-title-action" href="/{{ category['slug'] }}">See all {{ category['topics_count']}} topics</a>
         </div>
 
-        <div class="list">
+        <div class="clickable-list">
           {% for topic in category['last_topics'] %}
-            <a class="list-item" href="/{{ category['slug'] }}/{{ topic['slug'] }}">
+            <a class="clickable-list-item" href="/{{ category['slug'] }}/{{ topic['slug'] }}">
               <div>
                 <div>{{ topic['name'] }}</div>
-                <div class="list-item-sub">
+                <div class="clickable-list-item-sub">
                   <span class="icon material-icons-outlined">mode_comment</span>
                   <span>{{ topic['comments_count'] == 0 ? 'no comments yet' : topic['comments_count'] }}</span>
                 </div>

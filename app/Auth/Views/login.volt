@@ -5,7 +5,10 @@
   <link rel="stylesheet" href="/assets/css/material-icons.css">
   <link rel="stylesheet" href="/assets/css/shared.css">
   <link rel="stylesheet" href="/assets/css/header.css">
-  <link rel="stylesheet" href="/assets/css/content.css">
+
+  <link rel="stylesheet" href="/assets/css/form.css">
+
+  <link rel="stylesheet" href="/assets/css/pages/login.css">
 </head>
 <body>
 
@@ -18,11 +21,8 @@
             <span>{{ appName }}</span>
           </div>
           {% if user is not null %}
-            <div class="username" style="display: flex;
-    align-items: center;
-    color: #adafb3;text-transform: lowercase;
-    font-weight: 500;font-size: 15px;">
-              <span style="margin-right: 4px">{{ user.name }}</span>
+            <div class="username">
+              <span>{{ user.name }}</span>
               <span class="material-icons-outlined">account_box</span>
             </div>
           {% endif %}
@@ -39,11 +39,10 @@
         </div>
       </div>
 
-      <h1 class="width-100 max-width-280 margin-bottom-32 page-name" style="margin-top: 16px;
-    margin-bottom: 24px;">Login</h1>
+      <h1 class="title width-100 max-width-280 margin-bottom-32">Login</h1>
 
       {% if error is not null %}
-      <div class="message-box max-width-280" style="color: #e30000;
+      <div class="error max-width-280" style="color: #e30000;
     width: 100%;
     margin-top: -24px;height: auto;
     margin-bottom: 8px;">
@@ -53,12 +52,12 @@
 
       <form method="post" class="width-100 max-width-280">
         <div>
-          <input class="input margin-bottom-16" name="name" placeholder="username" required />
+          <input class="form-input margin-bottom-16" name="name" placeholder="username" required />
         </div>
         <div>
-          <input class="input margin-bottom-16" name="password" type="password" placeholder="password" required />
+          <input class="form-input margin-bottom-16" name="password" type="password" placeholder="password" required />
         </div>
-        <button class="button width-100" type="submit">Login</button>
+        <button class="form-button width-100" type="submit">Login</button>
       </form>
     </div>
   </main>

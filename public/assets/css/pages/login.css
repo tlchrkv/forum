@@ -1,0 +1,13 @@
+.title {
+    color: #c6c8ca;
+    text-transform: uppercase;
+    margin-top: 16px;
+    margin-bottom: 24px;
+}
+
+.error {
+    height: 60px;
+    width: 100%;
+    padding: 10px 0;
+    font-size: 14px;
+}

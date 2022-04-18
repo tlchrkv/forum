@@ -8,6 +8,6 @@ final class LoginFailed extends \Exception
 {
     public function __construct()
     {
-        parent::__construct('Login failed');
+        parent::__construct('Username or password isn\'t correct');
     }
 }

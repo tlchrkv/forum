@@ -25,3 +25,12 @@
     align-items: end;
     text-transform: uppercase;
 }
+.header-main > .username {
+    display: flex;
+    align-items: center;
+    color: #adafb3;text-transform: lowercase;
+    font-weight: 500;font-size: 15px;
+}
+.header-main > .username > span:first-child {
+    margin-right: 4px;
+}

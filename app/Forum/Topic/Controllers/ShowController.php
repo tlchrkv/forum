@@ -33,7 +33,7 @@ final class ShowController extends \Phalcon\Mvc\Controller
                 'categorySlug' => $categorySlug,
                 'topicSlug' => $slug,
                 'page' => $page,
-                'pages' => ceil($this->getCommentReadRepository()->countByTopicId($topic['id']) / 5),
+                'pages' => ceil($this->getCommentReadRepository()->countByTopicId($topic['id']) / 10),
             ]
         );
     }

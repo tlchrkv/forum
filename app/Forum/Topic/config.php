@@ -2,4 +2,8 @@
 
 declare(strict_types=1);
 
-return [];
+return [
+    'excluding_slugs' => [
+        'add-topic',
+    ],
+];

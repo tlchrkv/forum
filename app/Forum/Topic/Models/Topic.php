@@ -14,13 +14,13 @@ final class Topic extends \Phalcon\Mvc\Model
         $this->setSource('forum_topics');
     }
 
-    public static function add(UuidInterface $id, UuidInterface $categoryId, string $name, string $content, UuidInterface $userId): self
+    public static function add($id, $categoryId, string $name, string $content, $userId): self
     {
         $topic = new Topic([
             'id' => $id,
             'category_id' => $categoryId,
             'name' => $name,
-            'slug' => StringConverter::readableToSlug($name),
+            'slug' => UniqueSlugGenerator::generate($name),
             'content' => $content,
             'created_at' => (new \DateTime('now'))->format('Y-m-d H:i:s'),
             'created_by' => $userId,
@@ -34,7 +34,7 @@ final class Topic extends \Phalcon\Mvc\Model
     public function edit(string $name, string $content, $userId): void
     {
         $this->name = $name;
-        $this->slug = StringConverter::readableToSlug($name);
+        $this->slug = UniqueSlugGenerator::generate($name);
         $this->content = $content;
         $this->updated_at = (new \DateTime('now'))->format('Y-m-d H:i:s');
         $this->updated_by = $userId;

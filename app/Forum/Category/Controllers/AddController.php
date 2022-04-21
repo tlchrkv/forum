@@ -8,11 +8,15 @@ use App\Access\Models\AccessChecker\Forum\CategoryAccessChecker;
 use App\Access\Models\Forbidden;
 use App\Auth\Models\Auth;
 use App\Forum\Category\Models\Category;
-use App\SharedKernel\Http\Validation;
+use App\SharedKernel\Controllers\ModuleViewRender;
+use App\SharedKernel\Controllers\Validation;
 use Ramsey\Uuid\Uuid;
 
 final class AddController extends \Phalcon\Mvc\Controller
 {
+    use ModuleViewRender;
+    use Validation;
+
     public function mainAction()
     {
         if (!$this->getCategoryAccessChecker()->canAdd()) {
@@ -20,26 +24,28 @@ final class AddController extends \Phalcon\Mvc\Controller
         }
 
         if ($this->request->isPost()) {
-            $validation = new Validation([
-                'name' => 'required|length_between:1,64',
-            ]);
+            try {
+                $this->validatePostRequest(['name' => 'required|length_between:1,64']);
 
-            $validation->validate($_POST);
+                $user = $this->getAuth()->getUserFromSession();
 
-            $user = $this->getAuth()->getUserFromSession();
+                $category = Category::add(
+                    Uuid::uuid4(),
+                    $_POST['name'],
+                    $user->id
+                );
 
-            Category::add(
-                Uuid::uuid4(),
-                $_POST['name'],
-                Uuid::fromString($user->id)
-            );
+                $this->response->redirect('/' . $category->slug);
 
-            $this->response->redirect('/');
+                return;
+            } catch (\LogicException $e) {
+                $this->renderView(['error' => $e->getMessage(), 'name' => $_POST['name']]);
 
-            return;
+                return;
+            }
         }
 
-        echo $this->view->render(__DIR__ . '/../Views/add');
+        $this->renderView();
     }
 
     private function getCategoryAccessChecker(): CategoryAccessChecker

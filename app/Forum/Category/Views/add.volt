@@ -54,9 +54,21 @@
       </ol>
     </nav>
 
+    {% if error is not null %}
+      <div class="error margin-bottom-16" style="color: #e30000;width: 100%;">
+        {{ error }}
+      </div>
+    {% endif %}
+
     <form action="/add-category" method="post">
       <div>
-        <input class="form-input" name="name" placeholder="Name of the category" />
+        <input
+            class="form-input"
+            name="name"
+            placeholder="Name of the category"
+            {% if name is not null %} value="{{ name }}" {% endif %}
+            required
+        />
       </div>
       <button class="form-button" type="submit">Add category</button>
     </form>

@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace App\Forum\Category\Models;
 
-use App\Forum\Topic\Models\TopicWriteRepository;
-use App\SharedKernel\StringConverter;
-use Ramsey\Uuid\UuidInterface;
 use Phalcon\Mvc\Model\Resultset;
 
 final class Category extends \Phalcon\Mvc\Model
@@ -16,36 +13,32 @@ final class Category extends \Phalcon\Mvc\Model
         $this->setSource('forum_categories');
     }
 
-    public static function add(UuidInterface $id, string $name, UuidInterface $userId): void
+    public static function add($id, string $name, $userId): self
     {
+        if ((new CategoryReadRepository())->existByName(ucfirst($name))) {
+            throw new CategoryAlreadyExist();
+        }
+
         $category = new self([
             'id' => $id,
-            'name' => $name,
-            'slug' => StringConverter::readableToSlug($name),
+            'name' => ucfirst($name),
+            'slug' => UniqueSlugGenerator::generate($name),
             'created_at' => (new \DateTime('now'))->format('Y-m-d H:i:s'),
             'created_by' => $userId,
         ]);
 
         $category->save();
+
+        return $category;
     }
 
-    public function edit(string $name, UuidInterface $userId): void
+    public function edit(string $name, $userId): void
     {
-        $this->name = $name;
-        $this->slug = StringConverter::readableToSlug($name);
+        $this->name = ucfirst($name);
+        $this->slug = UniqueSlugGenerator::generate($name);
         $this->updated_at = (new \DateTime('now'))->format('Y-m-d H:i:s');
         $this->updated_by = $userId;
 
         $this->save();
-    }
-
-    public function getLastTopics(int $count): Resultset
-    {
-        return $this->getTopicRepository()->findLastByCategoryId($this->id, $count);
-    }
-
-    private function getTopicRepository(): TopicWriteRepository
-    {
-        return new TopicWriteRepository();
     }
 }

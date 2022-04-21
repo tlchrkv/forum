@@ -6,20 +6,24 @@ namespace App\Forum\Category\Controllers;
 
 use App\Forum\Category\Models\CategoryReadRepository;
 use App\Forum\Topic\Models\TopicReadRepository;
+use App\SharedKernel\Controllers\ModuleViewRender;
 
 final class IndexController extends \Phalcon\Mvc\Controller
 {
+    use ModuleViewRender;
+
     public function mainAction(): void
     {
+        $topicsPerCategory = 5;
         $categories = $this->getCategoryReadRepository()->findNotEmptyOrderedByLastActivity();
 
         foreach ($categories as &$category) {
             $category['last_topics'] = $this
                 ->getTopicReadRepository()
-                ->findByCategoryIdOrderedByLastActivity($category['id'], 5);
+                ->findByCategoryIdOrderedByLastActivity($category['id'], $topicsPerCategory);
         }
 
-        echo $this->view->render(__DIR__ . '/../Views/index', ['categories' => $categories]);
+        $this->renderView(['categories' => $categories, 'topicsPerCategory' => $topicsPerCategory]);
     }
 
     private function getCategoryReadRepository(): CategoryReadRepository

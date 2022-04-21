@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\User\Models;
 
 use App\Access\Models\Role;
-use Ramsey\Uuid\UuidInterface;
 
 final class User extends \Phalcon\Mvc\Model
 {
@@ -15,15 +14,19 @@ final class User extends \Phalcon\Mvc\Model
     }
 
     public static function add(
-        UuidInterface $id,
+        $id,
         string $name,
         string $password,
         Role $role,
-        UuidInterface $userId = null
+        $userId = null
     ): void {
+        if ((new UserRepository())->existByName($name)) {
+            throw new UserAlreadyExist();
+        }
+
         $user = new self([
             'id' => $id,
-            'name' => $name,
+            'name' => strtolower($name),
             'password_hash' => hash('sha256', $password),
             'role' => $role,
             'created_at' => (new \DateTime('now'))->format('Y-m-d H:i:s'),

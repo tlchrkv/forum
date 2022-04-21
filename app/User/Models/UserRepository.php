@@ -22,12 +22,17 @@ final class UserRepository
         return $user;
     }
 
+    public function existByName(string $name): bool
+    {
+        return 0 < User::count(['conditions' => 'name = ?0', 'bind' => [strtolower($name)]]);
+    }
+
     /**
      * @throws UserNotFound
      */
     public function getByName(string $name): User
     {
-        $user = User::findFirst(['conditions' => 'name = ?0', 'bind' => [$name]]);
+        $user = User::findFirst(['conditions' => 'name = ?0', 'bind' => [strtolower($name)]]);
 
         if ($user === false) {
             throw new UserNotFound();
@@ -36,12 +41,12 @@ final class UserRepository
         return $user;
     }
 
-    public function find(int $page, int $limit): Resultset
+    public function find(int $count, int $skip): Resultset
     {
         return User::find([
             'order' => 'created_at desc',
-            'limit' => $limit,
-            'offset' => ($page - 1) * $limit,
+            'limit' => $count,
+            'offset' => $skip,
         ]);
     }
 

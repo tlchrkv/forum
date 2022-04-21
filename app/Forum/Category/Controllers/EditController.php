@@ -8,40 +8,35 @@ use App\Access\Models\AccessChecker\Forum\CategoryAccessChecker;
 use App\Access\Models\Forbidden;
 use App\Auth\Models\Auth;
 use App\Forum\Category\Models\CategoryWriteRepository;
-use App\SharedKernel\Http\Validation;
-use Ramsey\Uuid\Uuid;
+use App\SharedKernel\Controllers\ModuleViewRender;
+use App\SharedKernel\Controllers\Validation;
 
 final class EditController extends \Phalcon\Mvc\Controller
 {
+    use ModuleViewRender;
+    use Validation;
+
     public function mainAction(string $id)
     {
         if (!$this->getCategoryAccessChecker()->canChange($id)) {
             throw new Forbidden();
         }
 
-        if ($this->request->isPost()) {
-            $validation = new Validation([
-                'name' => 'required|length_between:1,64',
-            ]);
+        $category = $this->getCategoryRepository()->get($id);
 
-            $validation->validate($_POST);
+        if ($this->request->isPost()) {
+            $this->validatePostRequest(['name' => 'required|length_between:1,64']);
 
             $user = $this->getAuth()->getUserFromSession();
 
-            $category = $this->getCategoryRepository()->get(Uuid::fromString($id));
-            $category->edit($_POST['name'], Uuid::fromString($user->id));
+            $category->edit($_POST['name'], $user->id);
 
             $this->response->redirect('/' . $category->slug);
 
             return;
         }
 
-        echo $this->view->render(
-            __DIR__ . '/../Views/edit',
-            [
-                'category' => $this->getCategoryRepository()->get(Uuid::fromString($id)),
-            ]
-        );
+        $this->renderView(['category' => $category]);
     }
 
     private function getCategoryAccessChecker(): CategoryAccessChecker

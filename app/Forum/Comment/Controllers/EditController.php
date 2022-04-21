@@ -14,6 +14,7 @@ use App\Forum\Topic\Models\TopicWriteRepository;
 use App\SharedKernel\Controllers\ModuleViewRender;
 use App\SharedKernel\File\Models\File;
 use App\SharedKernel\File\Models\FileRepository;
+use App\SharedKernel\Http\RequestFilesNormalizer;
 use App\SharedKernel\Http\Validation;
 use Ramsey\Uuid\Uuid;
 
@@ -41,7 +42,7 @@ final class EditController extends \Phalcon\Mvc\Controller
 
                 $images = [];
                 if ($_FILES['images']['error'][0] !== 4) {
-                    $images = $this->normalizeRequestFiles($_FILES['images']);
+                    $images = RequestFilesNormalizer::normalize($_FILES['images']);
 
                     $maxTotalSize = 1024 * 1024 * 4;
                     $totalSize = 0;
@@ -123,20 +124,5 @@ final class EditController extends \Phalcon\Mvc\Controller
     private function getTopicRepository(): TopicWriteRepository
     {
         return new TopicWriteRepository();
-    }
-
-    private function normalizeRequestFiles(array $requestFiles): array
-    {
-        $normalizedFiles = [];
-        $count = count($requestFiles['name']);
-        $keys = array_keys($requestFiles);
-
-        for ($i = 0; $i < $count; $i++) {
-            foreach ($keys as $key) {
-                $normalizedFiles[$i][$key] = $requestFiles[$key][$i];
-            }
-        }
-
-        return $normalizedFiles;
     }
 }

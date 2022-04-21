@@ -42,12 +42,12 @@
       <h1 class="title width-100 max-width-280 margin-bottom-32">Login</h1>
 
       {% if error is not null %}
-      <div class="error max-width-280" style="color: #e30000;
-    width: 100%;
-    margin-top: -24px;height: auto;
-    margin-bottom: 8px;">
-        {{ error }}
-      </div>
+        <div class="error max-width-280" style="color: #e30000;
+      width: 100%;
+      margin-top: -24px;height: auto;
+      margin-bottom: 8px;">
+          {{ error }}
+        </div>
       {% endif %}
 
       <form method="post" class="width-100 max-width-280">

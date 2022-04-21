@@ -54,12 +54,18 @@
       </ol>
     </nav>
 
+    {% if error is not null %}
+      <div class="error max-width-280 margin-bottom-16" style="color: #e30000;width: 100%;">
+        {{ error }}
+      </div>
+    {% endif %}
+
     <form action="/add-user" method="post">
       <div class="margin-bottom-16 max-width-280">
-        <input class="form-input" name="name" placeholder="Username" />
+        <input class="form-input" name="name" placeholder="Username" {% if name is not null %} value="{{ name }}" {% endif %} required />
       </div>
       <div class="max-width-280">
-        <input class="form-input" type="password" name="password" placeholder="Password" />
+        <input class="form-input" type="password" name="password" placeholder="Password" required />
       </div>
       <button class="form-button" type="submit">Add user</button>
     </form>

@@ -6,6 +6,14 @@ namespace App\Forum\Topic\Models;
 
 final class TopicReadRepository
 {
+    public function existBySlug(string $slug): bool
+    {
+        $connection = \Phalcon\DI::getDefault()->getShared('db');
+        $query = $connection->query("SELECT count(id) FROM forum_topics WHERE slug = '$slug'");
+
+        return 0 !== (int) $query->fetch()[0];
+    }
+
     public function findByCategoryIdOrderedByLastActivity(string $categoryId, int $count, int $skip = 0): array
     {
         $connection = \Phalcon\DI::getDefault()->getShared('db');

@@ -6,31 +6,35 @@ namespace App\Auth\Controllers;
 
 use App\Auth\Models\Auth;
 use App\Auth\Models\LoginFailed;
-use App\SharedKernel\Http\Validation;
+use App\SharedKernel\Controllers\ModuleViewRender;
+use App\SharedKernel\Controllers\Validation;
 
 final class LoginController extends \Phalcon\Mvc\Controller
 {
+    use ModuleViewRender;
+    use Validation;
+
     public function execAction(): void
     {
         if ($this->request->isPost()) {
-            $validation = new Validation([
-                'name' => 'required',
-                'password' => 'required'
-            ]);
-
             try {
-                $validation->validate($_POST);
+                $this->validatePostRequest([
+                    'name' => 'required',
+                    'password' => 'required'
+                ]);
+
                 $this->getAuth()->login($_POST['name'], $_POST['password']);
                 $this->response->redirect('/');
 
                 return;
             } catch (\InvalidArgumentException|LoginFailed $exception) {
-                echo $this->view->render(__DIR__ . '/../Views/login', ['error' => $exception->getMessage()]);
+                $this->renderView(['error' => $exception->getMessage()]);
+
                 return;
             }
         }
 
-        echo $this->view->render(__DIR__ . '/../Views/login');
+        $this->renderView();
     }
 
     private function getAuth(): Auth

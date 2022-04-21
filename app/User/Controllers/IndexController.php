@@ -4,28 +4,33 @@ namespace App\User\Controllers;
 
 use App\Access\Models\AccessChecker\User\AccessChecker;
 use App\Access\Models\Forbidden;
+use App\SharedKernel\Controllers\ModuleViewRender;
+use App\SharedKernel\Controllers\Pagination;
 use App\User\Models\UserRepository;
 
 final class IndexController extends \Phalcon\Mvc\Controller
 {
+    use ModuleViewRender;
+    use Pagination;
+
     public function mainAction(): void
     {
         if (!$this->getAccessChecker()->canManageUsers()) {
             throw new Forbidden();
         }
 
-        $page = (int) $this->request->getQuery('page', 'int', 1);
+        $rowsPerPage = 10;
 
-        $users = $this->getUserRepository()->find($page, 10);
-
-        echo $this->view->render(
-            __DIR__ . '/../Views/index',
-            [
-                'users' => $users,
-                'page' => $page,
-                'pages' => ceil($this->getUserRepository()->count() / 10),
-            ]
+        $users = $this->getUserRepository()->find(
+            $rowsPerPage,
+            $this->getSkipRowsNumber($rowsPerPage)
         );
+
+        $this->renderView([
+            'users' => $users,
+            'page' => $this->getCurrentPage(),
+            'pages' => $this->getTotalPages($this->getUserRepository()->count(), $rowsPerPage),
+        ]);
     }
 
     private function getUserRepository(): UserRepository

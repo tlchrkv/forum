@@ -55,12 +55,24 @@
       {% endif %}
 
       {% for category in categories %}
+        {% if user is null and category['topics_count'] is 0 %}
+          {% continue %}
+        {% endif %}
+
         <div class="secondary-title">
           <h2>
             <a href="/{{ category['slug'] }}">{{ category['name'] }}</a>
           </h2>
-          <a class="secondary-title-action" href="/{{ category['slug'] }}">See all {{ category['topics_count']}} topics</a>
+          <a class="secondary-title-action" href="/{{ category['slug'] }}">
+            {% if category['topics_count'] > topicsPerCategory %}
+              See all {{ category['topics_count']}} topics
+            {% endif %}
+          </a>
         </div>
+
+        {% if category['topics_count'] is 0 %}
+          <div style="font-size: 14px;color: #93989f;">No topics yet</div>
+        {% endif %}
 
         <div class="clickable-list">
           {% for topic in category['last_topics'] %}

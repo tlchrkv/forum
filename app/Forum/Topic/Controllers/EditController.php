@@ -10,14 +10,16 @@ use App\Auth\Models\Auth;
 use App\Forum\Category\Models\CategoryWriteRepository;
 use App\Forum\Topic\Models\TopicWriteRepository;
 use App\SharedKernel\Controllers\ModuleViewRender;
+use App\SharedKernel\Controllers\Validation;
 use App\SharedKernel\File\Models\File;
 use App\SharedKernel\File\Models\FileRepository;
-use App\SharedKernel\Http\Validation;
+use App\SharedKernel\Http\RequestFilesNormalizer;
 use Ramsey\Uuid\Uuid;
 
 final class EditController extends \Phalcon\Mvc\Controller
 {
     use ModuleViewRender;
+    use Validation;
 
     public function mainAction(string $id): void
     {
@@ -30,16 +32,14 @@ final class EditController extends \Phalcon\Mvc\Controller
 
         if ($this->request->isPost()) {
             try {
-                $validation = new Validation([
+                $this->validatePostRequest([
                     'name' => 'required|length_between:1,64',
                     'content' => 'required|length_between:1,20000',
                 ]);
 
-                $validation->validate($_POST);
-
                 $images = [];
                 if ($_FILES['images']['error'][0] !== 4) {
-                    $images = $this->normalizeRequestFiles($_FILES['images']);
+                    $images = RequestFilesNormalizer::normalize($_FILES['images']);
 
                     $maxTotalSize = 1024 * 1024 * 4;
                     $totalSize = 0;
@@ -121,20 +121,5 @@ final class EditController extends \Phalcon\Mvc\Controller
     private function getTopicRepository(): TopicWriteRepository
     {
         return new TopicWriteRepository();
-    }
-
-    private function normalizeRequestFiles(array $requestFiles): array
-    {
-        $normalizedFiles = [];
-        $count = count($requestFiles['name']);
-        $keys = array_keys($requestFiles);
-
-        for ($i = 0; $i < $count; $i++) {
-            foreach ($keys as $key) {
-                $normalizedFiles[$i][$key] = $requestFiles[$key][$i];
-            }
-        }
-
-        return $normalizedFiles;
     }
 }

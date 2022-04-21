@@ -3,11 +3,15 @@
 declare(strict_types=1);
 
 return [
-    'exclude_slugs' => [
-        'add-category',
-        'add-user',
+    'excluding_slugs' => [
+        'access',
+        'login',
+        'logout',
         'categories',
+        'add-category',
         'comments',
         'topics',
+        'users',
+        'add-user',
     ],
 ];

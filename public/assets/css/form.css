@@ -43,6 +43,6 @@
 }
 .form-button:hover {
     background-color: #dc0000;
-    color: #fcfcfc;
+    color: #fcfcfc !important;
+    transition: 0.17s;
 }
-

@@ -94,7 +94,7 @@ $diContainer->setShared('config', function () {
 try {
     $application->handle()->getContent();
 } catch (\App\SharedKernel\Exceptions\NotFoundException $exception) {
-    show_error($diContainer, 404, $exception->getMessage());
+    show_error($diContainer, 404, 'Page not found');
 } catch (\InvalidArgumentException $exception) {
     show_error($diContainer, 400, $exception->getMessage());
 } catch (\Phalcon\Mvc\Dispatcher\Exception $exception) {

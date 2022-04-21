@@ -75,7 +75,7 @@
           <div class="margin-bottom-16">
             {% for image in images %}
               <a href="/images/{{ image.id }}" target="_blank">
-                <img style="max-width: 160px;max-height: 160px;" src="{{ image.getImageBase64Content() }}">
+                <img style="max-width: 160px;max-height: 160px;" src="/images/{{ image.id }}">
               </a>
             {% endfor %}
           </div>
@@ -114,9 +114,9 @@
 
                 {% if commentImages[comment['id']] is not null %}
                   <div style="margin-top: 8px;margin-bottom: 8px;">
-                    {% for image in commentImages[comment['id']] %}
-                      <a href="/images/{{ image['id'] }}" target="_blank">
-                        <img style="max-width: 90px;max-height: 90px;" src="{{ image['content'] }}">
+                    {% for imageId in commentImages[comment['id']] %}
+                      <a href="/images/{{ imageId }}" target="_blank">
+                        <img style="max-width: 90px;max-height: 90px;" src="/images/{{ imageId }}">
                       </a>
                     {% endfor %}
                   </div>

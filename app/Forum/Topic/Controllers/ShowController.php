@@ -37,10 +37,7 @@ final class ShowController extends \Phalcon\Mvc\Controller
             $viewableCommentImages = [];
             $commentImages = $this->getFileRepository()->findByForumCommentsIds($commentIds);
             foreach ($commentImages as $commentImage) {
-                $viewableCommentImages[$commentImage->relation_id][] = [
-                    'id' => $commentImage->id,
-                    'content' => $commentImage->getImageBase64Content(),
-                ];
+                $viewableCommentImages[$commentImage->relation_id][] = $commentImage->id;
             }
         }
 

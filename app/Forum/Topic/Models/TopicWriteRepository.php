@@ -31,15 +31,13 @@ final class TopicWriteRepository
         return $topic;
     }
 
-    public function findLastByCategoryId($categoryId, $count): Resultset
+    public function findByCategoryId($categoryId): Resultset
     {
         return Topic::find([
             'conditions' => 'category_id = :category_id:',
             'bind' => [
                 'category_id' => $categoryId,
             ],
-            'order' => 'created_at desc',
-            'limit' => $count,
         ]);
     }
 }

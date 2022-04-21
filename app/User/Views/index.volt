@@ -59,7 +59,7 @@
               <span class="icon material-icons-outlined" style="margin-right: 4px;margin-top: 2px;font-size: 18px;">account_box</span>
               <span>{{ user.name }}</span>
             </div>
-            <div class="clickable-list-item-sub" style="font-size: 13px; text-transform: uppercase;margin-top: 1px;margin-left: 2px;">
+            <div class="clickable-list-item-sub" style="font-size: 12px; text-transform: uppercase;margin-top: 1px;margin-left: 2px;color: #b4b6ba;">
               <span>{{ user.role }}</span>
             </div>
           </div>

@@ -21,6 +21,15 @@ return [
         ],
         'httpMethods' => ['GET', 'POST'],
     ],
+    'user:show' => [
+        'pattern' => '/users/{id}',
+        'paths' => [
+            'namespace' => 'App\User\Controllers',
+            'controller' => 'show',
+            'action' => 'main',
+        ],
+        'httpMethods' => ['GET'],
+    ],
     'user:delete' => [
         'pattern' => '/users/{id}/delete',
         'paths' => [

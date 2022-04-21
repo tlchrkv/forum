@@ -2,54 +2,72 @@
 <html lang="en">
 <head>
   <title>{{ appName }}</title>
-  <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
-  <style>
-      a {
-          color: #135083;
-      }
-  </style>
+  <link rel="stylesheet" href="/assets/css/material-icons.css">
+  <link rel="stylesheet" href="/assets/css/shared.css">
+  <link rel="stylesheet" href="/assets/css/header.css">
+
+  <link rel="stylesheet" href="/assets/css/breadcrumbs.css">
+  <link rel="stylesheet" href="/assets/css/form.css">
+
+  <link rel="stylesheet" href="/assets/css/pages/assign-role.css">
 </head>
 <body>
-<div class="container" style="max-width: 720px">
-  <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-3 mt-3">
-    <a href="/" class="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none">. . .</a>
 
-    <div class="col-md-3 text-end">
+<header>
+  <div class="page-box header-main">
+    <div class="header-logo">
+      <span>{{ appName }}</span>
+    </div>
+    {% if user is not null %}
+      <div class="username">
+        <span>{{ user.name }}</span>
+        <span class="material-icons-outlined">account_box</span>
+      </div>
+    {% endif %}
+  </div>
+
+  <div class="page-box header-menu">
+    <div>
+      <a class="margin-right-8 text-gray" href="/">Topics</a>
+      {% if userAccess.canManageUsers() %}
+        <span class="margin-right-8 text-primary">Users</span>
+      {% endif %}
       {% if user is null %}
-        <a href="/login" class="text-dark text-decoration-none">Login</a>
+        <a class="text-gray" href="/login">Login</a>
       {% else %}
-        <span style="color: gray">{{ user.name }}</span>
-        <span style="color: gray"> | </span>
-        {% if userAccess.canManageUsers() %}
-          <a href="/users" class="text-dark text-decoration-none">Users</a>
-          <span style="color: gray"> | </span>
-        {% endif %}
-        <a href="/logout" class="text-dark text-decoration-none">Logout</a>
+        <a class="text-gray" href="/logout">Logout</a>
       {% endif %}
     </div>
-  </header>
+  </div>
+</header>
 
-  <nav aria-label="breadcrumb">
-    <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="/">Home</a></li>
-      <li class="breadcrumb-item"><a href="/users">Users</a></li>
-      <li class="breadcrumb-item active" aria-current="page">Assign role to {{ user1.name }}</li>
-    </ol>
-  </nav>
+<main>
+  <div class="page-box">
+    <h1 class="title">Assign role</h1>
 
-  <h1 class="card-title" style="margin-bottom: 2rem">Assign role to {{ user1.name }}</h1>
+    <nav>
+      <ol class="breadcrumbs">
+        <li class="breadcrumbs-item">
+          <a href="/users">Users</a>
+        </li>
+        <li class="breadcrumbs-item">
+          <a href="/users/{{ user1.id }}">{{ user1.name }}</a>
+        </li>
+        <li class="breadcrumbs-item active">Assign role</li>
+      </ol>
+    </nav>
 
-  <form action="/access/users/{{ user1.id }}/assign-role" method="post" style="margin-bottom: 2rem">
-    <div class="mb-3">
-      <select name="role" class="form-select">
-        <option value="user" {% if  user1.role == 'user' %} selected {% endif %}>User</option>
-        <option value="moderator" {% if  user1.role == 'moderator' %} selected {% endif %}>Moderator</option>
-        <option value="admin" {% if  user1.role == 'admin' %} selected {% endif %}>Admin</option>
-      </select>
-    </div>
-    <button type="submit" class="btn btn-primary">Assign role</button>
-  </form>
-
-</div>
+    <form action="/access/users/{{ user1.id }}/assign-role" method="post">
+      <div>
+        <select name="role" class="form-input">
+          <option value="user" {% if  user1.role == 'user' %} selected {% endif %}>User</option>
+          <option value="moderator" {% if  user1.role == 'moderator' %} selected {% endif %}>Moderator</option>
+          <option value="admin" {% if  user1.role == 'admin' %} selected {% endif %}>Admin</option>
+        </select>
+      </div>
+      <button type="submit" class="form-button">Assign role</button>
+    </form>
+  </div>
+</main>
 </body>
 </html>

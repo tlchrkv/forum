@@ -11,10 +11,16 @@ use App\Auth\Models\Auth;
 use App\Forum\Category\Models\CategoryWriteRepository;
 use App\Forum\Comment\Models\CommentWriteRepository;
 use App\Forum\Topic\Models\TopicWriteRepository;
+use App\SharedKernel\Controllers\ModuleViewRender;
+use App\SharedKernel\File\Models\File;
+use App\SharedKernel\File\Models\FileRepository;
 use App\SharedKernel\Http\Validation;
+use Ramsey\Uuid\Uuid;
 
 final class EditController extends \Phalcon\Mvc\Controller
 {
+    use ModuleViewRender;
+
     public function mainAction(string $id): void
     {
         $comment = $this->getCommentRepository()->get($id);
@@ -26,22 +32,72 @@ final class EditController extends \Phalcon\Mvc\Controller
         }
 
         if ($this->request->isPost()) {
-            $validation = new Validation([
-                'content' => 'required|length_between:1,2000',
-            ]);
+            try {
+                $validation = new Validation([
+                    'content' => 'required|length_between:1,2000',
+                ]);
 
-            $validation->validate($_POST);
+                $validation->validate($_POST);
 
-            $user = $this->getAuth()->getUserFromSession();
+                $images = [];
+                if ($_FILES['images']['error'][0] !== 4) {
+                    $images = $this->normalizeRequestFiles($_FILES['images']);
 
-            $comment->edit($_POST['content'], $user->id);
+                    $maxTotalSize = 1024 * 1024 * 4;
+                    $totalSize = 0;
 
-            $this->response->redirect('/' . $category->slug . '/' . $topic->slug);
+                    foreach ($images as $image) {
+                        if (!File::isImageMimeType(File::extractMimeType($image['tmp_name']))) {
+                            throw new \InvalidArgumentException('You can attach only images');
+                        }
 
-            return;
+                        $totalSize = $image['size'];
+                    }
+
+                    if ($totalSize > $maxTotalSize) {
+                        throw new \InvalidArgumentException('Total size of all images must be less than 4MB');
+                    }
+                }
+
+                $user = $this->getAuth()->getUserFromSession();
+
+                $comment->edit($_POST['content'], $user->id);
+
+                foreach ($images as $image) {
+                    File::addForForumComment(
+                        Uuid::uuid4(),
+                        $comment->id,
+                        $image['tmp_name'],
+                        $image['name']
+                    );
+                }
+
+                $this->response->redirect('/' . $category->slug . '/' . $topic->slug);
+
+                return;
+            } catch (\InvalidArgumentException $e) {
+                $this->renderView([
+                    'category' => $category,
+                    'topic' => $topic,
+                    'comment' => $comment,
+                    'images' => $this->getFileRepository()->findByForumCommentId($comment->id),
+                    'error' => $e->getMessage(),
+                    'content' => $_POST['content']
+                ]);
+            }
         }
 
-        echo $this->view->render(__DIR__ . '/../Views/edit', ['category' => $category, 'topic' => $topic, 'comment' => $comment]);
+        $this->renderView([
+            'category' => $category,
+            'topic' => $topic,
+            'comment' => $comment,
+            'images' => $this->getFileRepository()->findByForumCommentId($comment->id),
+        ]);
+    }
+
+    private function getFileRepository(): FileRepository
+    {
+        return new FileRepository();
     }
 
     private function getAuth(): Auth
@@ -67,5 +123,20 @@ final class EditController extends \Phalcon\Mvc\Controller
     private function getTopicRepository(): TopicWriteRepository
     {
         return new TopicWriteRepository();
+    }
+
+    private function normalizeRequestFiles(array $requestFiles): array
+    {
+        $normalizedFiles = [];
+        $count = count($requestFiles['name']);
+        $keys = array_keys($requestFiles);
+
+        for ($i = 0; $i < $count; $i++) {
+            foreach ($keys as $key) {
+                $normalizedFiles[$i][$key] = $requestFiles[$key][$i];
+            }
+        }
+
+        return $normalizedFiles;
     }
 }

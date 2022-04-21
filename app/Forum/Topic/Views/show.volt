@@ -71,6 +71,16 @@
           </ol>
         </nav>
 
+        {% if images|length > 0 %}
+          <div class="margin-bottom-16">
+            {% for image in images %}
+              <a href="/images/{{ image.id }}" target="_blank">
+                <img style="max-width: 160px;max-height: 160px;" src="{{ image.getImageBase64Content() }}">
+              </a>
+            {% endfor %}
+          </div>
+        {% endif %}
+
         <div class="content">{{ topic['content'] }}</div>
 
       </div>
@@ -90,6 +100,27 @@
                   <span class="icon material-icons-outlined">account_box</span>
                   <span>{{ comment['author_name'] }}</span>
                 </div>
+
+                {% if comment['reply_to_content'] is not null %}
+                  <div style="padding-left: 4px;
+    border-left: 2px solid #6d757d;
+    margin-bottom: 4px;
+    margin-left: 4px;
+    color: #6d757d;
+    font-size: 13px;">
+                    {{ comment['reply_to_content'] }}
+                  </div>
+                {% endif %}
+
+                {% if commentImages[comment['id']] is not null %}
+                  <div style="margin-top: 8px;margin-bottom: 8px;">
+                    {% for image in commentImages[comment['id']] %}
+                      <a href="/images/{{ image['id'] }}" target="_blank">
+                        <img style="max-width: 90px;max-height: 90px;" src="{{ image['content'] }}">
+                      </a>
+                    {% endfor %}
+                  </div>
+                {% endif %}
 
                 <div class="comment-content">
                   {{ comment['content'] }}
@@ -144,10 +175,13 @@
   </section>
 
   <section class="add-comment-section">
-    <form class="page-box" method="post" action="/{{ category['slug'] }}/{{ topic['slug'] }}/add-comment">
+    <form class="page-box" method="post" action="/{{ category['slug'] }}/{{ topic['slug'] }}/add-comment" enctype="multipart/form-data">
       <div class="secondary-title">Add comment</div>
       <div>
         <textarea class="form-input" rows="3" name="content" required placeholder="Type your comment here..."></textarea>
+      </div>
+      <div style="margin-top: 8px;">
+        <input name="images[]" type="file" multiple />
       </div>
       <button class="form-button" type="submit">Add comment</button>
     </form>

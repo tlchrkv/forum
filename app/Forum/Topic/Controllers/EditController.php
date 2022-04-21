@@ -9,10 +9,16 @@ use App\Access\Models\Forbidden;
 use App\Auth\Models\Auth;
 use App\Forum\Category\Models\CategoryWriteRepository;
 use App\Forum\Topic\Models\TopicWriteRepository;
+use App\SharedKernel\Controllers\ModuleViewRender;
+use App\SharedKernel\File\Models\File;
+use App\SharedKernel\File\Models\FileRepository;
 use App\SharedKernel\Http\Validation;
+use Ramsey\Uuid\Uuid;
 
 final class EditController extends \Phalcon\Mvc\Controller
 {
+    use ModuleViewRender;
+
     public function mainAction(string $id): void
     {
         $topic = $this->getTopicRepository()->get($id);
@@ -23,27 +29,78 @@ final class EditController extends \Phalcon\Mvc\Controller
         }
 
         if ($this->request->isPost()) {
-            $validation = new Validation([
-                'name' => 'required|length_between:1,64',
-                'content' => 'required|length_between:1,2000',
-            ]);
+            try {
+                $validation = new Validation([
+                    'name' => 'required|length_between:1,64',
+                    'content' => 'required|length_between:1,20000',
+                ]);
 
-            $validation->validate($_POST);
+                $validation->validate($_POST);
 
-            $user = $this->getAuth()->getUserFromSession();
+                $images = [];
+                if ($_FILES['images']['error'][0] !== 4) {
+                    $images = $this->normalizeRequestFiles($_FILES['images']);
 
-            $topic->edit(
-                $_POST['name'],
-                $_POST['content'],
-                $user->id
-            );
+                    $maxTotalSize = 1024 * 1024 * 4;
+                    $totalSize = 0;
 
-            $this->response->redirect('/' . $category->slug . '/' . $topic->slug);
+                    foreach ($images as $image) {
+                        if (!File::isImageMimeType(File::extractMimeType($image['tmp_name']))) {
+                            throw new \InvalidArgumentException('You can attach only images');
+                        }
 
-            return;
+                        $totalSize = $image['size'];
+                    }
+
+                    if ($totalSize > $maxTotalSize) {
+                        throw new \InvalidArgumentException('Total size of all images must be less than 4MB');
+                    }
+                }
+
+                $user = $this->getAuth()->getUserFromSession();
+
+                $topic->edit(
+                    $_POST['name'],
+                    $_POST['content'],
+                    $user->id
+                );
+
+                foreach ($images as $image) {
+                    File::addForForumTopic(
+                        Uuid::uuid4(),
+                        $topic->id,
+                        $image['tmp_name'],
+                        $image['name']
+                    );
+                }
+
+                $this->response->redirect('/' . $category->slug . '/' . $topic->slug);
+
+                return;
+            } catch (\InvalidArgumentException $e) {
+                $this->renderView([
+                    'category' => $category,
+                    'topic' => $topic,
+                    'images' => $this->getFileRepository()->findByForumTopicId($topic->id),
+                    'name' => $_POST['name'],
+                    'content' => $_POST['content'],
+                    'error' => $e->getMessage(),
+                ]);
+
+                return;
+            }
         }
 
-        echo $this->view->render(__DIR__ . '/../Views/edit', ['category' => $category, 'topic' => $topic]);
+        $this->renderView([
+            'category' => $category,
+            'topic' => $topic,
+            'images' => $this->getFileRepository()->findByForumTopicId($topic->id),
+        ]);
+    }
+
+    private function getFileRepository(): FileRepository
+    {
+        return new FileRepository();
     }
 
     private function getTopicAccessChecker(): TopicAccessChecker
@@ -64,5 +121,20 @@ final class EditController extends \Phalcon\Mvc\Controller
     private function getTopicRepository(): TopicWriteRepository
     {
         return new TopicWriteRepository();
+    }
+
+    private function normalizeRequestFiles(array $requestFiles): array
+    {
+        $normalizedFiles = [];
+        $count = count($requestFiles['name']);
+        $keys = array_keys($requestFiles);
+
+        for ($i = 0; $i < $count; $i++) {
+            foreach ($keys as $key) {
+                $normalizedFiles[$i][$key] = $requestFiles[$key][$i];
+            }
+        }
+
+        return $normalizedFiles;
     }
 }

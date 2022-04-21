@@ -33,4 +33,25 @@ final class StringConverter
 
         return strtolower($value);
     }
+
+    public static function classNameToDir(string $value): string
+    {
+        $classNameExploded = explode('\\', $value);
+
+        return substr(
+            lcfirst(
+                str_replace(
+                    '\\',
+                    '/',
+                    str_replace(
+                        end($classNameExploded),
+                        '',
+                        $value
+                    )
+                )
+            ),
+            0,
+            -1
+        );
+    }
 }

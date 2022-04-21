@@ -31,7 +31,7 @@ final class AssignRoleController extends \Phalcon\Mvc\Controller
 
             $user->assignRole(Role::fromValue($_POST['role']), $initiator->id);
 
-            $this->response->redirect('/users');
+            $this->response->redirect('/users/' . $userId);
             return;
         }
 

@@ -49,7 +49,7 @@
       <h1 class="title">
         <span>{{ category['name'] }}</span>
         {% if categoryAccess.canChange(category['id']) %}
-          <a href="/categories/{{ topic['id'] }}" class="icon material-icons">edit</a>
+          <a href="/categories/{{ category['id'] }}" class="icon material-icons">edit</a>
         {% endif %}
       </h1>
 

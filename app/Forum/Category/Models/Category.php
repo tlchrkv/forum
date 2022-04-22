@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Forum\Category\Models;
 
+use App\Forum\Topic\Models\TopicWriteRepository;
 use Phalcon\Mvc\Model\Resultset;
 
 final class Category extends \Phalcon\Mvc\Model
@@ -40,5 +41,14 @@ final class Category extends \Phalcon\Mvc\Model
         $this->updated_by = $userId;
 
         $this->save();
+    }
+
+    public function delete(): void
+    {
+        foreach ((new TopicWriteRepository())->findByCategoryId($this->id) as $topic) {
+            $topic->delete();
+        }
+
+        parent::delete();
     }
 }

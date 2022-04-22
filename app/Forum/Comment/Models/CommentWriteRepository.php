@@ -37,4 +37,14 @@ final class CommentWriteRepository
             'offset' => ($page - 1) * $limit,
         ]);
     }
+
+    public function findAllByTopicId($topicId): Resultset
+    {
+        return Comment::find([
+            'conditions' => 'topic_id = :topic_id:',
+            'bind' => [
+                'topic_id' => $topicId,
+            ],
+        ]);
+    }
 }

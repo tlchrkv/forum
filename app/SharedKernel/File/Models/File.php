@@ -56,10 +56,11 @@ final class File extends \Phalcon\Mvc\Model
         return include __DIR__ . '/../config.php';
     }
 
-    public function fullDelete(): void
+    public function delete(): void
     {
         unlink($this->placement);
-        $this->delete();
+
+        parent::delete();
     }
 
     public function getImageBase64Content(): string

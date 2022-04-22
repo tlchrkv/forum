@@ -10,7 +10,7 @@ final class DeleteController extends \Phalcon\Mvc\Controller
 {
     public function mainAction($id): void
     {
-        (new FileRepository())->get($id)->fullDelete();
+        (new FileRepository())->get($id)->delete();
 
         $this->response->redirect($_GET['redirect_to']);
     }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Forum\Comment\Models;
 
+use App\SharedKernel\File\Models\FileRepository;
 use App\User\Models\UserNotFound;
 use App\User\Models\UserRepository;
 use Ramsey\Uuid\UuidInterface;
@@ -36,6 +37,15 @@ final class Comment extends \Phalcon\Mvc\Model
         $this->updated_by = $userId;
 
         $this->save();
+    }
+
+    public function delete(): void
+    {
+        foreach ((new FileRepository())->findByForumCommentId($this->id) as $file) {
+            $file->delete();
+        }
+
+        parent::delete();
     }
 
     public function getAuthorName(): string

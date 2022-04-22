@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Forum\Topic\Models;
 
+use App\Forum\Comment\Models\CommentWriteRepository;
+use App\SharedKernel\File\Models\FileRepository;
 use App\SharedKernel\StringConverter;
 use Ramsey\Uuid\UuidInterface;
 
@@ -40,5 +42,18 @@ final class Topic extends \Phalcon\Mvc\Model
         $this->updated_by = $userId;
 
         $this->save();
+    }
+
+    public function delete(): void
+    {
+        foreach ((new CommentWriteRepository())->findAllByTopicId($this->id) as $comment) {
+            $comment->delete();
+        }
+
+        foreach ((new FileRepository())->findByForumTopicId($this->id) as $file) {
+            $file->delete();
+        }
+
+        parent::delete();
     }
 }
